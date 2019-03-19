@@ -2,6 +2,7 @@ package com.company;
 
 import java.util.ArrayList;
 import java.util.LinkedList;
+import java.util.concurrent.ScheduledExecutorService;
 
 public class Heuristics {
     public static Schedule HEFT(TaskDAG taskDAG, ProcessorDAG processorDAG) {
@@ -45,6 +46,42 @@ public class Heuristics {
         schedule.setAFT(schedule.getTaskExecutionSlot().get(taskDAG.getTasks().size() - 1).getEndTime());
 
         return schedule;
+    }
+
+    public static Schedule DynamicHEFT(Schedule schedule, TaskDAG taskDAG) {
+        Schedule tmpSchedule = new Schedule(schedule, taskDAG);
+
+//        prioritize tasks
+//        init list of unscheduled tasks
+        LinkedList<Task> unscheduledTasks = Heuristics.prioritizeTasks(taskDAG, tmpSchedule.getProcessorDAG());
+//        get the entry task by popping the first task from the unscheduled list
+        Task entryTask = unscheduledTasks.removeLast();
+        Processor earliestProcessorForEntryTask = tmpSchedule.getFirstProcessorFreeAt(taskDAG.getArrivalTime());
+
+        tmpSchedule.addNewSlot(earliestProcessorForEntryTask, entryTask, taskDAG.getArrivalTime());
+
+        while (unscheduledTasks.size() > 0) {
+            Task currentTask = taskDAG.getTasks().get(unscheduledTasks.removeLast().getId());
+
+            Slot selectedSlot = null;
+            Processor selectedProcessor = null;
+
+            for (int i = 0; i < tmpSchedule.getProcessorDAG().getProcessors().size(); i++) {
+                Processor currentProcessor = tmpSchedule.getProcessorDAG().getProcessors().get(i);
+                Slot currentSelectedSlot = tmpSchedule.getFirstFitSlotForTaskOnProcessor(currentProcessor, currentTask);
+
+                if (selectedSlot == null || currentSelectedSlot.getEndTime() < selectedSlot.getEndTime()) {
+                    selectedSlot = currentSelectedSlot;
+                    selectedProcessor = currentProcessor;
+                }
+            }
+
+            tmpSchedule.addNewSlot(selectedProcessor, currentTask, selectedSlot.getStartTime());
+        }
+
+        tmpSchedule.setAFT(tmpSchedule.getTaskExecutionSlot().get(taskDAG.getTasks().size() - 1).getEndTime());
+
+        return tmpSchedule;
     }
 
     public static LinkedList<Task> prioritizeTasks(TaskDAG taskDAG, ProcessorDAG processorDAG) {

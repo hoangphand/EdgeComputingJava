@@ -31,8 +31,9 @@ public class Schedule {
         }
     }
 
-//    add a new slot for a task on a processor at time startTime
+    //    add a new slot for a task on a processor at time startTime
     public void addNewSlot(Processor processor, Task task, double startTime) {
+//        System.out.println("Task id: " + task.getId());
         ArrayList<Slot> currentProcessorSlots = this.processorExecutionSlots.get(processor.getId());
 
         double computationTime = task.getComputationRequired() / processor.getProcessingRate();
@@ -54,7 +55,7 @@ public class Schedule {
                 if (startTime != currentSlot.getStartTime() && endTime != currentSlot.getEndTime()) {
                     currentProcessorSlots.add(slotBefore);
                     currentProcessorSlots.add(slotAfter);
-                } else if (startTime == currentSlot.getStartTime() && endTime!= currentSlot.getEndTime()) {
+                } else if (startTime == currentSlot.getStartTime() && endTime != currentSlot.getEndTime()) {
                     currentProcessorSlots.add(slotAfter);
                 } else if (startTime != currentSlot.getStartTime() && endTime == currentSlot.getEndTime()) {
                     currentProcessorSlots.add(slotBefore);
@@ -65,13 +66,12 @@ public class Schedule {
                 Collections.sort(currentProcessorSlots, Slot.compareByStartTime);
 
                 this.taskExecutionSlot.set(task.getId(), newSlot);
-
                 break;
             }
         }
     }
 
-//    this function calculates the earliest slot that a processor
+    //    this function calculates the earliest slot that a processor
 //    which will be able to execute a specified task
     public Slot getFirstFitSlotForTaskOnProcessor(Processor processor, Task task) {
 //        the ready time of the task at which
@@ -208,13 +208,15 @@ public class Schedule {
     public Processor getFirstProcessorFreeAt(double time) {
         Processor selectedProcessor = null;
         double earliestStartTime = Double.MAX_VALUE;
+        Slot selectedSlot = null;
 
         for (int processorId = 0; processorId < this.processorDAG.getProcessors().size(); processorId++) {
             for (int slotId = 0; slotId < this.processorExecutionSlots.get(processorId).size(); slotId++) {
                 Slot currentSlot = this.processorExecutionSlots.get(processorId).get(slotId);
 
-                if (currentSlot != null && currentSlot.getStartTime() <= time) {
+                if (currentSlot.getTask() == null && currentSlot.getStartTime() <= time && currentSlot.getEndTime() >= time) {
                     if (currentSlot.getStartTime() < earliestStartTime) {
+                        selectedSlot = currentSlot;
                         earliestStartTime = currentSlot.getStartTime();
                         selectedProcessor = this.processorDAG.getProcessors().get(processorId);
                     }
@@ -222,6 +224,8 @@ public class Schedule {
             }
         }
 
+        System.out.println("Found " + selectedProcessor.getId() + " at " + earliestStartTime +
+                " with slot[" + selectedSlot.getStartTime() + "--" + selectedSlot.getEndTime() + "]");
         return selectedProcessor;
     }
 
@@ -241,6 +245,18 @@ public class Schedule {
 
     public double getAFT() {
         return this.aft;
+    }
+
+    public ProcessorDAG getProcessorDAG() {
+        return this.processorDAG;
+    }
+
+    public ArrayList<ArrayList<Slot>> getProcessorExecutionSlots() {
+        return this.processorExecutionSlots;
+    }
+
+    public void setProcessorExecutionSlots(ArrayList<ArrayList<Slot>> processorExecutionSlots) {
+        this.processorExecutionSlots = processorExecutionSlots;
     }
 
     public ArrayList<Slot> getTaskExecutionSlot() {
@@ -265,6 +281,32 @@ public class Schedule {
                 }
                 System.out.println();
             }
+        }
+    }
+
+    public Schedule(Schedule schedule, TaskDAG taskDAG) {
+        this.taskDAG = taskDAG;
+        this.processorDAG = schedule.processorDAG;
+
+        this.processorExecutionSlots = new ArrayList<ArrayList<Slot>>();
+        for (int i = 0; i < this.processorDAG.getProcessors().size(); i++) {
+            Processor currentProcessor = this.processorDAG.getProcessors().get(i);
+            ArrayList<Slot> newListOfSlots = new ArrayList<Slot>();
+
+            for (int j = 0; j < schedule.processorExecutionSlots.get(currentProcessor.getId()).size(); j++) {
+                Slot currentOldSlot = schedule.processorExecutionSlots.get(currentProcessor.getId()).get(j);
+                Slot newSlot = new Slot(currentOldSlot.getTask(), currentProcessor,
+                        currentOldSlot.getStartTime(), currentOldSlot.getEndTime());
+
+                newListOfSlots.add(newSlot);
+            }
+
+            this.processorExecutionSlots.add(newListOfSlots);
+        }
+
+        this.taskExecutionSlot = new ArrayList<Slot>();
+        for (int i = 0; i < this.taskDAG.getTasks().size(); i++) {
+            this.taskExecutionSlot.add(null);
         }
     }
 }
