@@ -202,7 +202,7 @@ public class Schedule {
     }
 
     public int getNoOfTasksAllocatedToFogNodes() {
-        return this.taskDAG.getTasks().size() - this.getNoOfTasksAllocatedToCloudNodes();
+        return this.taskDAG.getTasks().size() - this.getNoOfTasksAllocatedToCloudNodes() - 2;
     }
 
     public Processor getFirstProcessorFreeAt(double time) {
@@ -224,8 +224,8 @@ public class Schedule {
             }
         }
 
-        System.out.println("Found " + selectedProcessor.getId() + " at " + earliestStartTime +
-                " with slot[" + selectedSlot.getStartTime() + "--" + selectedSlot.getEndTime() + "]");
+//        System.out.println("Found " + selectedProcessor.getId() + " at " + earliestStartTime +
+//                " with slot[" + selectedSlot.getStartTime() + "--" + selectedSlot.getEndTime() + "]");
         return selectedProcessor;
     }
 
@@ -308,5 +308,9 @@ public class Schedule {
         for (int i = 0; i < this.taskDAG.getTasks().size(); i++) {
             this.taskExecutionSlot.add(null);
         }
+    }
+
+    public TaskDAG getTaskDAG() {
+        return this.taskDAG;
     }
 }

@@ -16,11 +16,9 @@ public class Main {
 	    TaskDAG taskDAG = new TaskDAG(1, "dataset/1.dag");
 	    Schedule schedule = Heuristics.HEFT(taskDAG, processorDAG);
 	    double makespan = schedule.getAFT();
-	    System.out.println(PrintUtils.ANSI_GREEN_BACKGROUND + "app 1 ACCEPTED!!!" + PrintUtils.ANSI_RESET);
-		System.out.println("Makespan: " + makespan + ", deadline: " + taskDAG.getDeadline());
-		System.out.println("AST: " + schedule.getTaskExecutionSlot().get(0).getStartTime() +
-				", AFT: " + schedule.getTaskExecutionSlot().get(taskDAG.getTasks().size() - 1).getEndTime());
-//		schedule.showProcessorSlots();
+
+	    ScheduleResult scheduleResult = new ScheduleResult(schedule);
+	    scheduleResult.print();
 
 		int noOfAcceptedRequests = 1;
 
@@ -28,31 +26,16 @@ public class Main {
 			taskDAG = new TaskDAG(id, "dataset/" + id + ".dag");
 
 			Schedule tmpSchedule = Heuristics.DynamicHEFT(schedule, taskDAG);
-			int noOfClouds = tmpSchedule.getNoOfTasksAllocatedToCloudNodes();
-			int noOfFogs = tmpSchedule.getNoOfTasksAllocatedToFogNodes();
+			ScheduleResult tmpScheduleResult = new ScheduleResult(tmpSchedule);
 
-			makespan = tmpSchedule.getAFT() - taskDAG.getArrivalTime();
-
-			if (makespan < taskDAG.getDeadline()) {
-				noOfAcceptedRequests += 1;
+			if (tmpScheduleResult.isAccepted()) {
 				schedule.setProcessorExecutionSlots(tmpSchedule.getProcessorExecutionSlots());
-				System.out.println(PrintUtils.ANSI_GREEN_BACKGROUND + "app " + id + " ACCEPTED!!!" + PrintUtils.ANSI_RESET);
-			} else {
-				System.out.println(PrintUtils.ANSI_RED_BACKGROUND + "app " + id + " REJECTED!!!" + PrintUtils.ANSI_RESET);
+				noOfAcceptedRequests += 1;
 			}
 
-			System.out.println("Makespan: " + makespan + ", deadline: " + taskDAG.getDeadline());
-			System.out.println("AST: " + tmpSchedule.getTaskExecutionSlot().get(0).getStartTime() +
-					", AFT: " + tmpSchedule.getTaskExecutionSlot().get(taskDAG.getTasks().size() - 1).getEndTime());
-			System.out.println("No of slots: " + schedule.countSlotsInNetwork());
-			System.out.println("===============================================");
+			tmpScheduleResult.print();
 		}
 
-		System.out.println("Accepted: " + noOfAcceptedRequests);
-
-//		System.out.println("No of slots: " + schedule.countSlotsInNetwork());
-//		System.out.println("AFT: " + schedule.getAFT());
-//		System.out.println("Total computation cost: " + schedule.getTotalComputationCost());
-//		System.out.println("Total communication cost: " + schedule.getTotalCommunicationCost());
+		System.out.println("Accepted " + noOfAcceptedRequests);
     }
 }

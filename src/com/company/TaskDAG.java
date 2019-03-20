@@ -117,6 +117,7 @@ public class TaskDAG {
     }
 
     public TaskDAG(int id, String inputFilePath) {
+        this.id = id;
         BufferedReader reader;
 
         try {
@@ -194,6 +195,10 @@ public class TaskDAG {
     public double getArrivalTime() {
         return this.arrivalTime;
     }
+
+    public double getMakespanHEFT() { return this.makespanHEFT; }
+
+    public double getCCR() { return this.ccr; }
 
     public ProcessorDAG getProcessorDAG() {
         return this.processorDAG;

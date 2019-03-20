@@ -3,10 +3,108 @@
   <component name="ChangeListManager">
     <list default="true" id="f92c8bd8-a43c-491b-b5a9-b159a017ecd2" name="Default Changelist" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/EdgeComputingJava.iml" beforeDir="false" afterPath="$PROJECT_DIR$/EdgeComputingJava.iml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/com/company/Heuristics.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/com/company/Heuristics.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/dataset/10.dag" beforeDir="false" afterPath="$PROJECT_DIR$/dataset/10.dag" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/dataset/100.dag" beforeDir="false" afterPath="$PROJECT_DIR$/dataset/100.dag" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/dataset/11.dag" beforeDir="false" afterPath="$PROJECT_DIR$/dataset/11.dag" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/dataset/12.dag" beforeDir="false" afterPath="$PROJECT_DIR$/dataset/12.dag" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/dataset/13.dag" beforeDir="false" afterPath="$PROJECT_DIR$/dataset/13.dag" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/dataset/14.dag" beforeDir="false" afterPath="$PROJECT_DIR$/dataset/14.dag" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/dataset/15.dag" beforeDir="false" afterPath="$PROJECT_DIR$/dataset/15.dag" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/dataset/16.dag" beforeDir="false" afterPath="$PROJECT_DIR$/dataset/16.dag" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/dataset/17.dag" beforeDir="false" afterPath="$PROJECT_DIR$/dataset/17.dag" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/dataset/18.dag" beforeDir="false" afterPath="$PROJECT_DIR$/dataset/18.dag" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/dataset/19.dag" beforeDir="false" afterPath="$PROJECT_DIR$/dataset/19.dag" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/dataset/2.dag" beforeDir="false" afterPath="$PROJECT_DIR$/dataset/2.dag" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/dataset/20.dag" beforeDir="false" afterPath="$PROJECT_DIR$/dataset/20.dag" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/dataset/21.dag" beforeDir="false" afterPath="$PROJECT_DIR$/dataset/21.dag" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/dataset/22.dag" beforeDir="false" afterPath="$PROJECT_DIR$/dataset/22.dag" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/dataset/23.dag" beforeDir="false" afterPath="$PROJECT_DIR$/dataset/23.dag" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/dataset/24.dag" beforeDir="false" afterPath="$PROJECT_DIR$/dataset/24.dag" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/dataset/25.dag" beforeDir="false" afterPath="$PROJECT_DIR$/dataset/25.dag" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/dataset/26.dag" beforeDir="false" afterPath="$PROJECT_DIR$/dataset/26.dag" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/dataset/27.dag" beforeDir="false" afterPath="$PROJECT_DIR$/dataset/27.dag" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/dataset/28.dag" beforeDir="false" afterPath="$PROJECT_DIR$/dataset/28.dag" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/dataset/29.dag" beforeDir="false" afterPath="$PROJECT_DIR$/dataset/29.dag" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/dataset/3.dag" beforeDir="false" afterPath="$PROJECT_DIR$/dataset/3.dag" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/dataset/30.dag" beforeDir="false" afterPath="$PROJECT_DIR$/dataset/30.dag" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/dataset/31.dag" beforeDir="false" afterPath="$PROJECT_DIR$/dataset/31.dag" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/dataset/32.dag" beforeDir="false" afterPath="$PROJECT_DIR$/dataset/32.dag" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/dataset/33.dag" beforeDir="false" afterPath="$PROJECT_DIR$/dataset/33.dag" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/dataset/34.dag" beforeDir="false" afterPath="$PROJECT_DIR$/dataset/34.dag" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/dataset/35.dag" beforeDir="false" afterPath="$PROJECT_DIR$/dataset/35.dag" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/dataset/36.dag" beforeDir="false" afterPath="$PROJECT_DIR$/dataset/36.dag" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/dataset/37.dag" beforeDir="false" afterPath="$PROJECT_DIR$/dataset/37.dag" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/dataset/38.dag" beforeDir="false" afterPath="$PROJECT_DIR$/dataset/38.dag" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/dataset/39.dag" beforeDir="false" afterPath="$PROJECT_DIR$/dataset/39.dag" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/dataset/4.dag" beforeDir="false" afterPath="$PROJECT_DIR$/dataset/4.dag" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/dataset/40.dag" beforeDir="false" afterPath="$PROJECT_DIR$/dataset/40.dag" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/dataset/41.dag" beforeDir="false" afterPath="$PROJECT_DIR$/dataset/41.dag" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/dataset/42.dag" beforeDir="false" afterPath="$PROJECT_DIR$/dataset/42.dag" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/dataset/43.dag" beforeDir="false" afterPath="$PROJECT_DIR$/dataset/43.dag" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/dataset/44.dag" beforeDir="false" afterPath="$PROJECT_DIR$/dataset/44.dag" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/dataset/45.dag" beforeDir="false" afterPath="$PROJECT_DIR$/dataset/45.dag" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/dataset/46.dag" beforeDir="false" afterPath="$PROJECT_DIR$/dataset/46.dag" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/dataset/47.dag" beforeDir="false" afterPath="$PROJECT_DIR$/dataset/47.dag" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/dataset/48.dag" beforeDir="false" afterPath="$PROJECT_DIR$/dataset/48.dag" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/dataset/49.dag" beforeDir="false" afterPath="$PROJECT_DIR$/dataset/49.dag" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/dataset/5.dag" beforeDir="false" afterPath="$PROJECT_DIR$/dataset/5.dag" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/dataset/50.dag" beforeDir="false" afterPath="$PROJECT_DIR$/dataset/50.dag" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/dataset/51.dag" beforeDir="false" afterPath="$PROJECT_DIR$/dataset/51.dag" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/dataset/52.dag" beforeDir="false" afterPath="$PROJECT_DIR$/dataset/52.dag" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/dataset/53.dag" beforeDir="false" afterPath="$PROJECT_DIR$/dataset/53.dag" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/dataset/54.dag" beforeDir="false" afterPath="$PROJECT_DIR$/dataset/54.dag" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/dataset/55.dag" beforeDir="false" afterPath="$PROJECT_DIR$/dataset/55.dag" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/dataset/56.dag" beforeDir="false" afterPath="$PROJECT_DIR$/dataset/56.dag" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/dataset/57.dag" beforeDir="false" afterPath="$PROJECT_DIR$/dataset/57.dag" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/dataset/58.dag" beforeDir="false" afterPath="$PROJECT_DIR$/dataset/58.dag" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/dataset/59.dag" beforeDir="false" afterPath="$PROJECT_DIR$/dataset/59.dag" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/dataset/6.dag" beforeDir="false" afterPath="$PROJECT_DIR$/dataset/6.dag" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/dataset/60.dag" beforeDir="false" afterPath="$PROJECT_DIR$/dataset/60.dag" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/dataset/61.dag" beforeDir="false" afterPath="$PROJECT_DIR$/dataset/61.dag" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/dataset/62.dag" beforeDir="false" afterPath="$PROJECT_DIR$/dataset/62.dag" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/dataset/63.dag" beforeDir="false" afterPath="$PROJECT_DIR$/dataset/63.dag" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/dataset/64.dag" beforeDir="false" afterPath="$PROJECT_DIR$/dataset/64.dag" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/dataset/65.dag" beforeDir="false" afterPath="$PROJECT_DIR$/dataset/65.dag" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/dataset/66.dag" beforeDir="false" afterPath="$PROJECT_DIR$/dataset/66.dag" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/dataset/67.dag" beforeDir="false" afterPath="$PROJECT_DIR$/dataset/67.dag" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/dataset/68.dag" beforeDir="false" afterPath="$PROJECT_DIR$/dataset/68.dag" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/dataset/69.dag" beforeDir="false" afterPath="$PROJECT_DIR$/dataset/69.dag" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/dataset/7.dag" beforeDir="false" afterPath="$PROJECT_DIR$/dataset/7.dag" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/dataset/70.dag" beforeDir="false" afterPath="$PROJECT_DIR$/dataset/70.dag" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/dataset/71.dag" beforeDir="false" afterPath="$PROJECT_DIR$/dataset/71.dag" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/dataset/72.dag" beforeDir="false" afterPath="$PROJECT_DIR$/dataset/72.dag" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/dataset/73.dag" beforeDir="false" afterPath="$PROJECT_DIR$/dataset/73.dag" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/dataset/74.dag" beforeDir="false" afterPath="$PROJECT_DIR$/dataset/74.dag" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/dataset/75.dag" beforeDir="false" afterPath="$PROJECT_DIR$/dataset/75.dag" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/dataset/76.dag" beforeDir="false" afterPath="$PROJECT_DIR$/dataset/76.dag" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/dataset/77.dag" beforeDir="false" afterPath="$PROJECT_DIR$/dataset/77.dag" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/dataset/78.dag" beforeDir="false" afterPath="$PROJECT_DIR$/dataset/78.dag" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/dataset/79.dag" beforeDir="false" afterPath="$PROJECT_DIR$/dataset/79.dag" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/dataset/8.dag" beforeDir="false" afterPath="$PROJECT_DIR$/dataset/8.dag" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/dataset/80.dag" beforeDir="false" afterPath="$PROJECT_DIR$/dataset/80.dag" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/dataset/81.dag" beforeDir="false" afterPath="$PROJECT_DIR$/dataset/81.dag" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/dataset/82.dag" beforeDir="false" afterPath="$PROJECT_DIR$/dataset/82.dag" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/dataset/83.dag" beforeDir="false" afterPath="$PROJECT_DIR$/dataset/83.dag" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/dataset/84.dag" beforeDir="false" afterPath="$PROJECT_DIR$/dataset/84.dag" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/dataset/85.dag" beforeDir="false" afterPath="$PROJECT_DIR$/dataset/85.dag" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/dataset/86.dag" beforeDir="false" afterPath="$PROJECT_DIR$/dataset/86.dag" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/dataset/87.dag" beforeDir="false" afterPath="$PROJECT_DIR$/dataset/87.dag" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/dataset/88.dag" beforeDir="false" afterPath="$PROJECT_DIR$/dataset/88.dag" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/dataset/89.dag" beforeDir="false" afterPath="$PROJECT_DIR$/dataset/89.dag" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/dataset/9.dag" beforeDir="false" afterPath="$PROJECT_DIR$/dataset/9.dag" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/dataset/90.dag" beforeDir="false" afterPath="$PROJECT_DIR$/dataset/90.dag" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/dataset/91.dag" beforeDir="false" afterPath="$PROJECT_DIR$/dataset/91.dag" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/dataset/92.dag" beforeDir="false" afterPath="$PROJECT_DIR$/dataset/92.dag" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/dataset/93.dag" beforeDir="false" afterPath="$PROJECT_DIR$/dataset/93.dag" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/dataset/94.dag" beforeDir="false" afterPath="$PROJECT_DIR$/dataset/94.dag" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/dataset/95.dag" beforeDir="false" afterPath="$PROJECT_DIR$/dataset/95.dag" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/dataset/96.dag" beforeDir="false" afterPath="$PROJECT_DIR$/dataset/96.dag" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/dataset/97.dag" beforeDir="false" afterPath="$PROJECT_DIR$/dataset/97.dag" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/dataset/98.dag" beforeDir="false" afterPath="$PROJECT_DIR$/dataset/98.dag" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/dataset/99.dag" beforeDir="false" afterPath="$PROJECT_DIR$/dataset/99.dag" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/com/company/Main.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/com/company/Main.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/com/company/Schedule.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/com/company/Schedule.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/com/company/TaskDAG.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/com/company/TaskDAG.java" afterDir="false" />
     </list>
     <ignored path="$PROJECT_DIR$/out/" />
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
@@ -17,11 +115,23 @@
   </component>
   <component name="FileEditorManager">
     <leaf SIDE_TABS_SIZE_LIMIT_KEY="300">
-      <file pinned="false" current-in-tab="true">
+      <file pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/src/com/company/Main.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="187">
-              <caret line="11" column="32" selection-start-line="11" selection-start-column="32" selection-end-line="11" selection-end-column="32" />
+            <state relative-caret-position="191">
+              <caret line="31" column="37" lean-forward="true" selection-start-line="31" selection-start-column="37" selection-end-line="31" selection-end-column="37" />
+              <folding>
+                <element signature="imports" expanded="true" />
+              </folding>
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file pinned="false" current-in-tab="true">
+        <entry file="file://$PROJECT_DIR$/src/com/company/MainGanttChart.java">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="214">
+              <caret line="104" column="31" selection-start-line="104" selection-start-column="31" selection-end-line="104" selection-end-column="31" />
               <folding>
                 <element signature="imports" expanded="true" />
               </folding>
@@ -30,10 +140,41 @@
         </entry>
       </file>
       <file pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/dataset/18.dag">
+        <entry file="file://$PROJECT_DIR$/dataset/2.dag">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="289">
-              <caret line="62" column="65" lean-forward="true" selection-start-line="62" selection-start-column="56" selection-end-line="62" selection-end-column="65" />
+            <state relative-caret-position="333">
+              <caret line="1429" column="36" lean-forward="true" selection-start-line="1429" selection-start-column="36" selection-end-line="1429" selection-end-column="36" />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/src/com/company/Schedule.java">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="-837">
+              <caret line="227" column="45" selection-start-line="226" selection-start-column="45" selection-end-line="227" selection-end-column="45" />
+              <folding>
+                <element signature="imports" expanded="true" />
+                <element signature="e#968#974#0" expanded="true" />
+                <element signature="method#getTotalComputationCost#0;class#Schedule#0" />
+                <element signature="method#getTotalCommunicationCost#0;class#Schedule#0" />
+                <element signature="method#getComputationCostOfTask#1;class#Schedule#0" />
+                <element signature="method#getMaxPredCommunicationCost#0;class#Schedule#0" />
+                <element signature="method#countSlotsInNetwork#0;class#Schedule#0" />
+                <element signature="method#setProcessorExecutionSlots#0;class#Schedule#0" />
+                <element signature="e#12495#12501#0" expanded="true" />
+                <element signature="e#13046#13047#0" expanded="true" />
+                <element signature="e#13081#13082#0" expanded="true" />
+              </folding>
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/src/com/company/ScheduleResult.java">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="255">
+              <caret line="42" column="76" selection-start-line="42" selection-start-column="76" selection-end-line="42" selection-end-column="76" />
             </state>
           </provider>
         </entry>
@@ -41,7 +182,7 @@
       <file pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/src/com/company/Heuristics.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="153">
+            <state relative-caret-position="-153">
               <caret line="27" column="14" selection-start-line="27" selection-start-column="14" selection-end-line="27" selection-end-column="44" />
               <folding>
                 <element signature="imports" expanded="true" />
@@ -52,72 +193,16 @@
         </entry>
       </file>
       <file pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/src/com/company/Schedule.java">
+        <entry file="file://$PROJECT_DIR$/src/com/company/TaskDAG.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="353">
-              <caret line="227" column="16" selection-start-line="227" selection-start-column="16" selection-end-line="227" selection-end-column="16" />
+            <state relative-caret-position="-1118">
+              <caret line="125" column="49" lean-forward="true" selection-start-line="125" selection-start-column="49" selection-end-line="125" selection-end-column="49" />
               <folding>
                 <element signature="imports" expanded="true" />
-                <element signature="e#968#974#0" expanded="true" />
-                <element signature="method#getTotalComputationCost#0;class#Schedule#0" />
-                <element signature="method#getTotalCommunicationCost#0;class#Schedule#0" />
-                <element signature="method#getComputationCostOfTask#1;class#Schedule#0" />
-                <element signature="method#getMaxPredCommunicationCost#0;class#Schedule#0" />
-                <element signature="method#getNoOfTasksAllocatedToCloudNodes#0;class#Schedule#0" />
-                <element signature="method#getNoOfTasksAllocatedToFogNodes#0;class#Schedule#0" />
-                <element signature="method#countSlotsInNetwork#0;class#Schedule#0" />
-                <element signature="method#setProcessorExecutionSlots#0;class#Schedule#0" />
-                <element signature="e#12495#12501#0" expanded="true" />
-              </folding>
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/src/com/company/PrintUtils.java">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="323">
-              <caret line="19" column="68" selection-start-line="19" selection-start-column="68" selection-end-line="19" selection-end-column="68" />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/src/com/company/Slot.java">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="-187">
-              <caret line="4" column="45" selection-start-line="4" selection-start-column="45" selection-end-line="4" selection-end-column="45" />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/src/com/company/ProcessorDAG.java">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="2108">
-              <caret line="136" column="18" selection-start-line="136" selection-start-column="18" selection-end-line="136" selection-end-column="18" />
-              <folding>
-                <element signature="imports" expanded="true" />
-                <element signature="e#2444#2445#0" expanded="true" />
-                <element signature="e#2532#2533#0" expanded="true" />
-                <element signature="e#3147#3148#0" expanded="true" />
-                <element signature="e#3236#3237#0" expanded="true" />
-              </folding>
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/src/com/company/Task.java">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="-1441">
-              <caret line="52" column="58" selection-start-line="52" selection-start-column="58" selection-end-line="52" selection-end-column="58" />
-              <folding>
-                <element signature="imports" expanded="true" />
-                <element signature="e#2331#2332#0" expanded="true" />
-                <element signature="e#2374#2375#0" expanded="true" />
-                <element signature="e#3836#3837#0" expanded="true" />
-                <element signature="e#3871#3872#0" expanded="true" />
+                <element signature="method#TaskDAG#0;class#TaskDAG#0" />
+                <element signature="e#1762#1768#0" expanded="true" />
+                <element signature="e#2282#2288#0" expanded="true" />
+                <element signature="e#2918#2924#0" expanded="true" />
               </folding>
             </state>
           </provider>
@@ -142,6 +227,8 @@
       <find>Float</find>
       <find>float</find>
       <find>print</find>
+      <find>128.5073355610071</find>
+      <find>createGanttChart</find>
       <find>Syste</find>
     </findStrings>
     <replaceStrings>
@@ -160,16 +247,19 @@
         <option value="$PROJECT_DIR$/src/com/company/SortingUtils.java" />
         <option value="$PROJECT_DIR$/src/com/company/Slot.java" />
         <option value="$PROJECT_DIR$/src/com/company/ProcessorDAG.java" />
-        <option value="$PROJECT_DIR$/src/com/company/TaskDAG.java" />
         <option value="$PROJECT_DIR$/src/com/company/RandomUtils.java" />
         <option value="$PROJECT_DIR$/src/com/company/Processor.java" />
         <option value="$PROJECT_DIR$/src/com/company/Task.java" />
         <option value="$PROJECT_DIR$/src/com/company/PrintUtils.java" />
         <option value="$PROJECT_DIR$/.gitignore" />
-        <option value="$PROJECT_DIR$/src/com/company/GanttChartExample.java" />
         <option value="$PROJECT_DIR$/src/com/company/Heuristics.java" />
-        <option value="$PROJECT_DIR$/src/com/company/Schedule.java" />
         <option value="$PROJECT_DIR$/src/com/company/Main.java" />
+        <option value="$PROJECT_DIR$/src/com/company/Schedule.java" />
+        <option value="$PROJECT_DIR$/src/com/company/TaskDAG.java" />
+        <option value="$PROJECT_DIR$/src/com/company/GanttChartExample.java" />
+        <option value="$PROJECT_DIR$/src/com/company/RoomManager.java" />
+        <option value="$PROJECT_DIR$/src/com/company/ScheduleResult.java" />
+        <option value="$PROJECT_DIR$/src/com/company/MainGanttChart.java" />
       </list>
     </option>
   </component>
@@ -194,6 +284,11 @@
             <path>
               <item name="EdgeComputingJava" type="b2602c69:ProjectViewProjectNode" />
               <item name="EdgeComputingJava" type="462c0819:PsiDirectoryNode" />
+            </path>
+            <path>
+              <item name="EdgeComputingJava" type="b2602c69:ProjectViewProjectNode" />
+              <item name="EdgeComputingJava" type="462c0819:PsiDirectoryNode" />
+              <item name="dataset" type="462c0819:PsiDirectoryNode" />
             </path>
             <path>
               <item name="EdgeComputingJava" type="b2602c69:ProjectViewProjectNode" />
@@ -223,11 +318,12 @@
     </panes>
   </component>
   <component name="PropertiesComponent">
-    <property name="com.android.tools.idea.instantapp.provision.ProvisionBeforeRunTaskProvider.myTimeStamp" value="1553026510956" />
+    <property name="com.android.tools.idea.instantapp.provision.ProvisionBeforeRunTaskProvider.myTimeStamp" value="1553107011109" />
     <property name="last_opened_file_path" value="$USER_HOME$/Documents/Thesis/jfreechart-1.0.19/lib/swtgraphics2d.jar!/" />
     <property name="project.structure.last.edited" value="Modules" />
     <property name="project.structure.proportion" value="0.15" />
     <property name="project.structure.side.proportion" value="0.2" />
+    <property name="restartRequiresConfirmation" value="false" />
     <property name="settings.editor.selected.configurable" value="preferences.lookFeel" />
   </component>
   <component name="RunDashboard">
@@ -242,20 +338,7 @@
       </list>
     </option>
   </component>
-  <component name="RunManager" selected="Application.Main">
-    <configuration name="GanttChartExample (1)" type="Application" factoryName="Application" temporary="true" nameIsGenerated="true">
-      <option name="MAIN_CLASS_NAME" value="com.company.GanttChartExample" />
-      <module name="EdgeComputingJava" />
-      <extension name="coverage">
-        <pattern>
-          <option name="PATTERN" value="com.company.*" />
-          <option name="ENABLED" value="true" />
-        </pattern>
-      </extension>
-      <method v="2">
-        <option name="Make" enabled="true" />
-      </method>
-    </configuration>
+  <component name="RunManager">
     <configuration name="GanttChartExample" type="Application" factoryName="Application" temporary="true" nameIsGenerated="true">
       <option name="MAIN_CLASS_NAME" value="GanttChartExample" />
       <module name="EdgeComputingJava" />
@@ -273,15 +356,43 @@
         <option name="Make" enabled="true" />
       </method>
     </configuration>
+    <configuration name="MainGanttChart" type="Application" factoryName="Application" temporary="true" nameIsGenerated="true">
+      <option name="MAIN_CLASS_NAME" value="com.company.MainGanttChart" />
+      <module name="EdgeComputingJava" />
+      <extension name="coverage">
+        <pattern>
+          <option name="PATTERN" value="com.company.*" />
+          <option name="ENABLED" value="true" />
+        </pattern>
+      </extension>
+      <method v="2">
+        <option name="Make" enabled="true" />
+      </method>
+    </configuration>
+    <configuration name="RoomManager" type="Application" factoryName="Application" temporary="true" nameIsGenerated="true">
+      <option name="MAIN_CLASS_NAME" value="com.company.RoomManager" />
+      <module name="EdgeComputingJava" />
+      <extension name="coverage">
+        <pattern>
+          <option name="PATTERN" value="com.company.*" />
+          <option name="ENABLED" value="true" />
+        </pattern>
+      </extension>
+      <method v="2">
+        <option name="Make" enabled="true" />
+      </method>
+    </configuration>
     <list>
       <item itemvalue="Application.Main" />
       <item itemvalue="Application.GanttChartExample" />
-      <item itemvalue="Application.GanttChartExample (1)" />
+      <item itemvalue="Application.MainGanttChart" />
+      <item itemvalue="Application.RoomManager" />
     </list>
     <recent_temporary>
       <list>
+        <item itemvalue="Application.MainGanttChart" />
         <item itemvalue="Application.Main" />
-        <item itemvalue="Application.GanttChartExample (1)" />
+        <item itemvalue="Application.RoomManager" />
         <item itemvalue="Application.GanttChartExample" />
       </list>
     </recent_temporary>
@@ -389,32 +500,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/com/company/TaskDAG.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="393">
-          <caret line="127" column="36" selection-start-line="127" selection-start-column="36" selection-end-line="127" selection-end-column="36" />
-          <folding>
-            <element signature="imports" expanded="true" />
-            <element signature="e#1762#1768#0" expanded="true" />
-            <element signature="e#2282#2288#0" expanded="true" />
-            <element signature="e#2918#2924#0" expanded="true" />
-            <element signature="e#6230#6236#0" expanded="true" />
-            <element signature="e#6766#6767#0" expanded="true" />
-            <element signature="e#6799#6800#0" expanded="true" />
-            <element signature="e#6852#6853#0" expanded="true" />
-            <element signature="e#6886#6887#0" expanded="true" />
-            <element signature="e#6912#6913#0" expanded="true" />
-            <element signature="e#6942#6943#0" expanded="true" />
-            <element signature="e#6977#6978#0" expanded="true" />
-            <element signature="e#7013#7014#0" expanded="true" />
-            <element signature="e#6835#6836#0" expanded="true" />
-            <element signature="e#6873#6874#0" expanded="true" />
-            <element signature="e#7002#7003#0" expanded="true" />
-            <element signature="e#7042#7043#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/.gitignore">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="408">
@@ -436,38 +521,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/com/company/GanttChartExample.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="544">
-          <caret line="32" column="49" lean-forward="true" selection-start-line="32" selection-start-column="49" selection-end-line="32" selection-end-column="49" />
-          <folding>
-            <element signature="imports" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/dataset/1.dag">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="-21546" />
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/dataset/processors.dag">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="697">
-          <caret line="41" column="24" selection-start-line="41" selection-start-column="24" selection-end-line="41" selection-end-column="24" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/dataset/2.dag">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="-23960" />
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/dataset/3.dag">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="-26986" />
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/src/com/company/Task.java">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="-1441">
@@ -479,13 +532,6 @@
             <element signature="e#3836#3837#0" expanded="true" />
             <element signature="e#3871#3872#0" expanded="true" />
           </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/dataset/18.dag">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="289">
-          <caret line="62" column="65" lean-forward="true" selection-start-line="62" selection-start-column="56" selection-end-line="62" selection-end-column="65" />
         </state>
       </provider>
     </entry>
@@ -503,29 +549,16 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/com/company/Schedule.java">
+    <entry file="file://$PROJECT_DIR$/dataset/18.dag">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="353">
-          <caret line="227" column="16" selection-start-line="227" selection-start-column="16" selection-end-line="227" selection-end-column="16" />
-          <folding>
-            <element signature="imports" expanded="true" />
-            <element signature="e#968#974#0" expanded="true" />
-            <element signature="method#getTotalComputationCost#0;class#Schedule#0" />
-            <element signature="method#getTotalCommunicationCost#0;class#Schedule#0" />
-            <element signature="method#getComputationCostOfTask#1;class#Schedule#0" />
-            <element signature="method#getMaxPredCommunicationCost#0;class#Schedule#0" />
-            <element signature="method#getNoOfTasksAllocatedToCloudNodes#0;class#Schedule#0" />
-            <element signature="method#getNoOfTasksAllocatedToFogNodes#0;class#Schedule#0" />
-            <element signature="method#countSlotsInNetwork#0;class#Schedule#0" />
-            <element signature="method#setProcessorExecutionSlots#0;class#Schedule#0" />
-            <element signature="e#12495#12501#0" expanded="true" />
-          </folding>
+        <state relative-caret-position="1054">
+          <caret line="62" column="65" selection-start-line="62" selection-start-column="56" selection-end-line="62" selection-end-column="65" />
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/src/com/company/Heuristics.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="153">
+        <state relative-caret-position="-153">
           <caret line="27" column="14" selection-start-line="27" selection-start-column="14" selection-end-line="27" selection-end-column="44" />
           <folding>
             <element signature="imports" expanded="true" />
@@ -534,10 +567,156 @@
         </state>
       </provider>
     </entry>
+    <entry file="jar://$USER_HOME$/Documents/Thesis/jfreechart-1.0.19/lib/jfreechart-1.0.19.jar!/org/jfree/data/time/TimePeriod.class">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="102">
+          <caret line="9" column="17" selection-start-line="9" selection-start-column="17" selection-end-line="9" selection-end-column="17" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="jar://$USER_HOME$/Documents/Thesis/jfreechart-1.0.19/lib/jfreechart-1.0.19.jar!/org/jfree/data/gantt/Task.class">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="170">
+          <caret line="24" column="42" selection-start-line="24" selection-start-column="42" selection-end-line="24" selection-end-column="42" />
+          <folding>
+            <element signature="e#1058#1059#0" expanded="true" />
+            <element signature="e#1125#1126#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="jar://$USER_HOME$/Documents/Thesis/jfreechart-1.0.19/lib/jfreechart-1.0.19.jar!/org/jfree/data/gantt/TaskSeries.class">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="102">
+          <caret line="17" column="11" selection-start-line="17" selection-start-column="11" selection-end-line="17" selection-end-column="11" />
+          <folding>
+            <element signature="e#456#457#0" expanded="true" />
+            <element signature="e#483#484#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/com/company/RoomManager.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="585">
+          <caret line="37" column="33" selection-start-line="37" selection-start-column="27" selection-end-line="37" selection-end-column="33" />
+          <folding>
+            <element signature="imports" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/dataset/processors.dag">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="255">
+          <caret line="21" column="24" selection-start-line="21" selection-start-column="20" selection-end-line="21" selection-end-column="24" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="jar://$USER_HOME$/Documents/Thesis/jfreechart-1.0.19/lib/jfreechart-1.0.19.jar!/org/jfree/chart/ChartFactory.class">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="162">
+          <caret line="745" column="29" selection-start-line="745" selection-start-column="29" selection-end-line="745" selection-end-column="29" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/dataset/1.dag">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="-21546" />
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/dataset/3.dag">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="-26986" />
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/dataset/4.dag">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="-23977" />
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/dataset/5.dag">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="-27989" />
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/dataset/6.dag">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="-23195" />
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/dataset/7.dag">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="-20169" />
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/dataset/8.dag">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="-23297" />
+      </provider>
+    </entry>
     <entry file="file://$PROJECT_DIR$/src/com/company/Main.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="187">
-          <caret line="11" column="32" selection-start-line="11" selection-start-column="32" selection-end-line="11" selection-end-column="32" />
+        <state relative-caret-position="191">
+          <caret line="31" column="37" lean-forward="true" selection-start-line="31" selection-start-column="37" selection-end-line="31" selection-end-column="37" />
+          <folding>
+            <element signature="imports" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/dataset/2.dag">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="333">
+          <caret line="1429" column="36" lean-forward="true" selection-start-line="1429" selection-start-column="36" selection-end-line="1429" selection-end-column="36" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/com/company/TaskDAG.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="-1118">
+          <caret line="125" column="49" lean-forward="true" selection-start-line="125" selection-start-column="49" selection-end-line="125" selection-end-column="49" />
+          <folding>
+            <element signature="imports" expanded="true" />
+            <element signature="method#TaskDAG#0;class#TaskDAG#0" />
+            <element signature="e#1762#1768#0" expanded="true" />
+            <element signature="e#2282#2288#0" expanded="true" />
+            <element signature="e#2918#2924#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/com/company/Schedule.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="-837">
+          <caret line="227" column="45" selection-start-line="226" selection-start-column="45" selection-end-line="227" selection-end-column="45" />
+          <folding>
+            <element signature="imports" expanded="true" />
+            <element signature="e#968#974#0" expanded="true" />
+            <element signature="method#getTotalComputationCost#0;class#Schedule#0" />
+            <element signature="method#getTotalCommunicationCost#0;class#Schedule#0" />
+            <element signature="method#getComputationCostOfTask#1;class#Schedule#0" />
+            <element signature="method#getMaxPredCommunicationCost#0;class#Schedule#0" />
+            <element signature="method#countSlotsInNetwork#0;class#Schedule#0" />
+            <element signature="method#setProcessorExecutionSlots#0;class#Schedule#0" />
+            <element signature="e#12495#12501#0" expanded="true" />
+            <element signature="e#13046#13047#0" expanded="true" />
+            <element signature="e#13081#13082#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/com/company/ScheduleResult.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="255">
+          <caret line="42" column="76" selection-start-line="42" selection-start-column="76" selection-end-line="42" selection-end-column="76" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/com/company/MainGanttChart.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="214">
+          <caret line="104" column="31" selection-start-line="104" selection-start-column="31" selection-end-line="104" selection-end-column="31" />
           <folding>
             <element signature="imports" expanded="true" />
           </folding>
