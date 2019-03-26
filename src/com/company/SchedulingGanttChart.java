@@ -1,37 +1,30 @@
 package com.company;
 
-import java.awt.*;
-import java.text.SimpleDateFormat;
-import java.util.Date;
-import javax.swing.JFrame;
-import javax.swing.SwingUtilities;
-import javax.swing.WindowConstants;
 import org.jfree.chart.ChartFactory;
 import org.jfree.chart.ChartPanel;
 import org.jfree.chart.ChartUtilities;
 import org.jfree.chart.JFreeChart;
 import org.jfree.chart.axis.DateAxis;
 import org.jfree.chart.axis.SymbolAxis;
-import org.jfree.chart.plot.CategoryPlot;
 import org.jfree.chart.plot.PlotOrientation;
 import org.jfree.chart.plot.XYPlot;
 import org.jfree.chart.renderer.xy.XYBarRenderer;
-import org.jfree.data.category.IntervalCategoryDataset;
 import org.jfree.data.gantt.Task;
 import org.jfree.data.gantt.TaskSeries;
 import org.jfree.data.gantt.TaskSeriesCollection;
 import org.jfree.data.gantt.XYTaskDataset;
 import org.jfree.data.xy.IntervalXYDataset;
 
-public class MainGanttChart extends JFrame {
+import javax.swing.*;
+import java.awt.*;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 
-    private static final long serialVersionUID = 1L;
-
-    public MainGanttChart(String title, Schedule schedule) {
-        super(title);
+public class SchedulingGanttChart {
+    public SchedulingGanttChart(JFrame frame, Schedule schedule) {
         JFreeChart chart = ChartFactory.createXYBarChart(
                 "Task scheduling for app " + schedule.getTaskDAG().getId(),
-                "Resource", false, "Timing", getCategoryDataset(schedule),
+                "Resource", false, "Timing", this.getCategoryDataset(schedule),
                 PlotOrientation.HORIZONTAL,
                 true, false, false);
 
@@ -66,7 +59,7 @@ public class MainGanttChart extends JFrame {
         ChartUtilities.applyCurrentTheme(chart);
 
         ChartPanel panel = new ChartPanel(chart);
-        setContentPane(panel);
+        frame.setContentPane(panel);
     }
 
     private IntervalXYDataset getCategoryDataset(Schedule schedule) {
@@ -100,43 +93,4 @@ public class MainGanttChart extends JFrame {
 
         return new XYTaskDataset(dataset);
     }
-
-    public static void main(String[] args) {
-        int noOfDAGsToTest = 20;
-
-        ProcessorDAG processorDAG = new ProcessorDAG("dataset/processors.dag");
-
-        TaskDAG taskDAG = new TaskDAG(1, "dataset/1.dag");
-        Schedule schedule = Heuristics.HEFT(taskDAG, processorDAG);
-        double makespan = schedule.getAFT();
-
-        ScheduleResult scheduleResult = new ScheduleResult(schedule);
-        scheduleResult.print();
-
-        int noOfAcceptedRequests = 1;
-
-        for (int id = 2; id < noOfDAGsToTest + 1; id++) {
-            taskDAG = new TaskDAG(id, "dataset/" + id + ".dag");
-
-            Schedule tmpSchedule = Heuristics.DynamicHEFT(schedule, taskDAG);
-            ScheduleResult tmpScheduleResult = new ScheduleResult(tmpSchedule);
-
-            if (tmpScheduleResult.isAccepted()) {
-                schedule.setProcessorExecutionSlots(tmpSchedule.getProcessorExecutionSlots());
-                noOfAcceptedRequests += 1;
-            }
-
-            tmpScheduleResult.print();
-        }
-
-        System.out.println("Accepted " + noOfAcceptedRequests);
-
-        SwingUtilities.invokeLater(() -> {
-            MainGanttChart example = new MainGanttChart("Gantt Chart", schedule);
-            example.setSize(800, 400);
-            example.setLocationRelativeTo(null);
-            example.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
-            example.setVisible(true);
-        });
-    }
-}  
+}

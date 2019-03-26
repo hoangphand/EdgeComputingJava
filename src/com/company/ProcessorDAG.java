@@ -135,8 +135,6 @@ public class ProcessorDAG {
     }
 
     public double getCommunicationTime(Processor fromProcessor, Processor toProcessor, double amountOfData) {
-        double communicationTime = 0;
-
         if (fromProcessor.getId() == toProcessor.getId()) {
             return 0;
         } else {
