@@ -29,7 +29,7 @@ public class Main {
 			ScheduleResult tmpScheduleResult = new ScheduleResult(tmpSchedule);
 
 			if (tmpScheduleResult.isAccepted()) {
-				schedule.setProcessorExecutionSlots(tmpSchedule.getProcessorExecutionSlots());
+				schedule.setProcessorExecutionSlots(tmpSchedule.getProcessorCoreExecutionSlots());
 				noOfAcceptedRequests += 1;
 			}
 

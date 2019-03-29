@@ -13,9 +13,9 @@ public class Heuristics {
 //        get the entry task by popping the first task from the unscheduled list
         Task entryTask = unscheduledTasks.removeLast();
 //        get the most powerful processor in the network
-        Processor mostPowerfulProcessor = processorDAG.getTheMostPowerfulProcessor();
+//        Processor mostPowerfulProcessor = processorDAG.getTheMostPowerfulProcessor();
 //        allocate dummy entry task on the most powerful processing node at timestamp 0
-        schedule.addNewSlot(mostPowerfulProcessor, entryTask, 0);
+        schedule.addNewSlot(schedule.getFirstProcessorFreeAt(0), entryTask, 0);
 
 //        loop through all unscheduled tasks
         while (unscheduledTasks.size() > 0) {
@@ -23,22 +23,22 @@ public class Heuristics {
 
 //            calculate ready time to calculate current task on all the processors in the network
             Slot selectedSlot = null;
-            Processor selectedProcessor = null;
+            ProcessorCore selectedProcessorCore = null;
 //            System.out.println("Current task: " + currentTask.getId());
 //            schedule.showProcessorSlots();
 
 //            loop through all processors to find the best processing execution location
-            for (int i = 0; i < processorDAG.getProcessors().size(); i++) {
-                Processor currentProcessor = processorDAG.getProcessors().get(i);
+            for (int i = 0; i < schedule.getProcessorCoreExecutionSlots().size(); i++) {
+                ProcessorCore currentProcessorCore = schedule.getProcessorCoreExecutionSlots().get(i).get(0).getProcessorCore();
 //                find the first-fit slot on the current processor for the current task
-                Slot currentSelectedSlot = schedule.getFirstFitSlotForTaskOnProcessor(currentProcessor, currentTask);
+                Slot currentSelectedSlot = schedule.getFirstFitSlotForTaskOnProcessor(currentProcessorCore, currentTask);
 
                 if (selectedSlot == null || currentSelectedSlot.getEndTime() < selectedSlot.getEndTime()) {
                     selectedSlot = currentSelectedSlot;
-                    selectedProcessor = currentProcessor;
+                    selectedProcessorCore = currentProcessorCore;
                 }
             }
-            schedule.addNewSlot(selectedProcessor, currentTask, selectedSlot.getStartTime());
+            schedule.addNewSlot(selectedProcessorCore, currentTask, selectedSlot.getStartTime());
 //            System.out.println("Selected slot: [" + selectedSlot.getStartTime() + "--" + selectedSlot.getEndTime() + "], processor: " + selectedProcessor.getId());
 //            System.out.println("==========================================================================");
         }
@@ -56,27 +56,27 @@ public class Heuristics {
         LinkedList<Task> unscheduledTasks = Heuristics.prioritizeTasks(taskDAG, tmpSchedule.getProcessorDAG());
 //        get the entry task by popping the first task from the unscheduled list
         Task entryTask = unscheduledTasks.removeLast();
-        Processor earliestProcessorForEntryTask = tmpSchedule.getFirstProcessorFreeAt(taskDAG.getArrivalTime());
+        ProcessorCore earliestProcessorCoreForEntryTask = tmpSchedule.getFirstProcessorFreeAt(taskDAG.getArrivalTime());
 
-        tmpSchedule.addNewSlot(earliestProcessorForEntryTask, entryTask, taskDAG.getArrivalTime());
+        tmpSchedule.addNewSlot(earliestProcessorCoreForEntryTask, entryTask, taskDAG.getArrivalTime());
 
         while (unscheduledTasks.size() > 0) {
             Task currentTask = taskDAG.getTasks().get(unscheduledTasks.removeLast().getId());
 
             Slot selectedSlot = null;
-            Processor selectedProcessor = null;
+            ProcessorCore selectedProcessorCore = null;
 
-            for (int i = 0; i < tmpSchedule.getProcessorDAG().getProcessors().size(); i++) {
-                Processor currentProcessor = tmpSchedule.getProcessorDAG().getProcessors().get(i);
-                Slot currentSelectedSlot = tmpSchedule.getFirstFitSlotForTaskOnProcessor(currentProcessor, currentTask);
+            for (int i = 0; i < tmpSchedule.getProcessorCoreExecutionSlots().size(); i++) {
+                ProcessorCore currentProcessorCore = tmpSchedule.getProcessorCoreExecutionSlots().get(i).get(0).getProcessorCore();
+                Slot currentSelectedSlot = tmpSchedule.getFirstFitSlotForTaskOnProcessor(currentProcessorCore, currentTask);
 
                 if (selectedSlot == null || currentSelectedSlot.getEndTime() < selectedSlot.getEndTime()) {
                     selectedSlot = currentSelectedSlot;
-                    selectedProcessor = currentProcessor;
+                    selectedProcessorCore = currentProcessorCore;
                 }
             }
 
-            tmpSchedule.addNewSlot(selectedProcessor, currentTask, selectedSlot.getStartTime());
+            tmpSchedule.addNewSlot(selectedProcessorCore, currentTask, selectedSlot.getStartTime());
         }
 
         tmpSchedule.setAFT(tmpSchedule.getTaskExecutionSlot().get(taskDAG.getTasks().size() - 1).getEndTime());
@@ -128,6 +128,10 @@ public class Heuristics {
         listOfTasks.get(0).setPriority(listOfTasks.get(0).getPriority() + 1);
 
         Task.sortByPriority(listOfTasks);
+
+//        for (int i = 0; i < listOfTasks.size(); i++) {
+//            System.out.println(listOfTasks.get(i).getId() + ": " + listOfTasks.get(i).getPriority());
+//        }
 
         return listOfTasks;
     }

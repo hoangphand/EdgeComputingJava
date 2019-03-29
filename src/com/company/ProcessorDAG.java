@@ -38,12 +38,15 @@ public class ProcessorDAG {
 
                 boolean isFog = Boolean.parseBoolean(rowDetails[1]);
 
-                Processor newProcessor = new Processor(i, isFog);
-                newProcessor.setProcessingRate(Integer.parseInt(rowDetails[2]));
-                newProcessor.setRAM(Integer.parseInt(rowDetails[3]));
-                newProcessor.setStorage(Integer.parseInt(rowDetails[4]));
-                newProcessor.setWanUploadBandwidth(Integer.parseInt(rowDetails[5]));
-                newProcessor.setWanDownloadBandwidth(Integer.parseInt(rowDetails[6]));
+                Processor newProcessor = new Processor(i);
+                newProcessor.setIsFog(isFog);
+                newProcessor.setProcessingRate(Double.parseDouble(rowDetails[2]));
+                newProcessor.setNoOfCores(Integer.parseInt(rowDetails[3]));
+                newProcessor.setRAM(Integer.parseInt(rowDetails[4]));
+                newProcessor.setStorage(Integer.parseInt(rowDetails[5]));
+                newProcessor.setWanUploadBandwidth(Integer.parseInt(rowDetails[6]));
+                newProcessor.setWanDownloadBandwidth(Integer.parseInt(rowDetails[7]));
+                newProcessor.setCostPerTimeUnit(Double.parseDouble(rowDetails[7]));
 
                 this.processors.add(newProcessor);
             }
@@ -68,14 +71,24 @@ public class ProcessorDAG {
         int totalProcessingRate = 0;
 
         for (int i = 0; i < this.processors.size(); i++) {
-            totalProcessingRate += this.processors.get(i).getProcessingRate();
+            totalProcessingRate += this.processors.get(i).getProcessingRate() * this.processors.get(i).getNoOfCores();
         }
 
         return totalProcessingRate;
     }
 
+    public int getTotalNumberOfCores() {
+        int totalNumberOfCores = 0;
+
+        for (int i = 0; i < this.processors.size(); i++) {
+            totalNumberOfCores += this.processors.get(i).getNoOfCores();
+        }
+
+        return totalNumberOfCores;
+    }
+
     public double getAvgProcessingRate() {
-        return this.getTotalProcessingRate() / (this.noOfClouds + this.noOfFogs);
+        return this.getTotalProcessingRate() / this.getTotalNumberOfCores();
     }
 
     public int getTotalUploadBandwidth() {
@@ -134,11 +147,19 @@ public class ProcessorDAG {
         return theMostPowerfulProcesor;
     }
 
-    public double getCommunicationTime(Processor fromProcessor, Processor toProcessor, double amountOfData) {
+    public double getCommunicationTimeBetweenProcessors(Processor fromProcessor, Processor toProcessor, double amountOfData) {
         if (fromProcessor.getId() == toProcessor.getId()) {
             return 0;
         } else {
             return amountOfData / this.getBandwidthToUse(fromProcessor, toProcessor);
+        }
+    }
+
+    public double getCommunicationTimeBetweenCores(ProcessorCore fromProcessorCore, ProcessorCore toProcessorCore, double amountOfData) {
+        if (fromProcessorCore.getProcessor().getId() == toProcessorCore.getProcessor().getId()) {
+            return 0;
+        } else {
+            return amountOfData / this.getBandwidthToUse(fromProcessorCore.getProcessor(), toProcessorCore.getProcessor());
         }
     }
 }

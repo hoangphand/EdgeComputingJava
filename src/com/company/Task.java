@@ -6,7 +6,7 @@ import java.util.Comparator;
 import java.util.LinkedList;
 
 public class Task {
-    // MI: million instructions
+    // x 10^9 CPU cycles
     private static final double TASK_COMPUTATION_REQUIRED_LOWER_BOUND = 2f;
     private static final double TASK_COMPUTATION_REQUIRED_UPPER_BOUND = 60f;
     // MB: megabyte

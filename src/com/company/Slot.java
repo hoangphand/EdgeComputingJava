@@ -4,13 +4,13 @@ import java.util.*;
 
 public class Slot implements Comparable<Slot> {
     private Task task;
-    private Processor processor;
+    private ProcessorCore processorCore;
     private double startTime;
     private double endTime;
 
-    public Slot(Task task, Processor processor, double startTime, double endTime) {
+    public Slot(Task task, ProcessorCore processorCore, double startTime, double endTime) {
         this.task = task;
-        this.processor = processor;
+        this.processorCore = processorCore;
         this.startTime = startTime;
         this.endTime = endTime;
     }
@@ -20,7 +20,11 @@ public class Slot implements Comparable<Slot> {
     }
 
     public Processor getProcessor() {
-        return this.processor;
+        return this.processorCore.getProcessor();
+    }
+
+    public ProcessorCore getProcessorCore() {
+        return this.processorCore;
     }
 
     public double getStartTime() {

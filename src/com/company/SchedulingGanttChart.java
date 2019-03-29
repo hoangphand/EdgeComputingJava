@@ -77,8 +77,8 @@ public class SchedulingGanttChart {
 
             TaskSeries taskSeries = new TaskSeries(processorName);
 
-            for (int j = 0; j < schedule.getProcessorExecutionSlots().get(i).size(); j++) {
-                Slot currentSlot = schedule.getProcessorExecutionSlots().get(i).get(j);
+            for (int j = 0; j < schedule.getProcessorCoreExecutionSlots().get(i).size(); j++) {
+                Slot currentSlot = schedule.getProcessorCoreExecutionSlots().get(i).get(j);
 
                 if (currentSlot.getTask() != null) {
                     long startTime = (new Double(currentSlot.getStartTime() * 1000)).longValue();

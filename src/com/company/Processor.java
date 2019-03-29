@@ -23,16 +23,46 @@ public class Processor {
     private static final int STORAGE_CLOUD_LOWER_BOUND = 8192;
     private static final int STORAGE_CLOUD_UPPER_BOUND = 102400;
 
+    // PROCESSOR TYPES
+    private static final int PROCESSOR_TYPE_FOG_1 = 1;
+    private static final int PROCESSOR_TYPE_FOG_2 = 1;
+    private static final int PROCESSOR_TYPE_FOG_3 = 1;
+    private static final int PROCESSOR_TYPE_FOG_4 = 1;
+    private static final int PROCESSOR_TYPE_CLOUD_1 = 5;
+    private static final int PROCESSOR_TYPE_CLOUD_2 = 6;
+    private static final int PROCESSOR_TYPE_CLOUD_3 = 7;
+    private static final int PROCESSOR_TYPE_CLOUD_4 = 8;
+    private static final int PROCESSOR_TYPE_CLOUD_5 = 9;
+
+    private static final double[] PROCESSING_RATES = {0, 1.1, 1.6, 2.0, 2.4, 2.2, 2.6, 2.6, 3.0, 3.0};
+    private static final int[] NUMBER_OF_CORES = {0, 1, 1, 1, 1, 2, 2, 4, 2, 4};
+    private static final double[] COST_PER_TIME_UNIT = {0, 0, 0, 0, 0, 1.0, 1.3, 1.5, 1.7, 2.0};
+
     // properties
     private int id;
     private boolean isFog;
-    private int processingRate;
+    private double processingRate;
     private int ram;
     private int storage;
     private int wanUploadBandwidth;
     private int wanDownloadBandwidth;
+    private int noOfCores;
+    private double costPerTimeUnit;
 
-    public Processor(int id, boolean isFog, int processingRate, int ram, int storage, int wanUploadBandwidth, int wanDownloadBandwidth) {
+    public Processor(int id) {
+        this.id = id;
+        this.isFog = false;
+        this.processingRate = 0;
+        this.ram = 0;
+        this.storage = 0;
+        this.wanDownloadBandwidth = 0;
+        this.wanUploadBandwidth = 0;
+        this.noOfCores = 0;
+        this.costPerTimeUnit = 0;
+    }
+
+    public Processor(int id, boolean isFog, double processingRate, int noOfCores, int ram,
+                     int storage, int wanUploadBandwidth, int wanDownloadBandwidth, double costPerTimeUnit) {
         this.id = id;
         this.isFog = isFog;
         this.processingRate = processingRate;
@@ -40,31 +70,32 @@ public class Processor {
         this.storage = storage;
         this.wanDownloadBandwidth = wanDownloadBandwidth;
         this.wanUploadBandwidth = wanUploadBandwidth;
+        this.noOfCores = noOfCores;
+        this.costPerTimeUnit = costPerTimeUnit;
     }
 
-    public Processor(int id, boolean isFog) {
+    public Processor(int id, int processorType, int wanUploadBandwidth, int wanDownloadBandwidth) {
         this.id = id;
-        this.isFog = isFog;
 
-        if (this.isFog) {
-            this.processingRate = RandomUtils.getRandomIntInRange(PROCESSING_RATE_FOG_LOWER_BOUND, PROCESSING_RATE_FOG_UPPER_BOUND);
-            this.ram = RandomUtils.getRandomElement(RAM_FOG);
-            this.storage = RandomUtils.getRandomIntInRange(STORAGE_FOG_LOWER_BOUND, STORAGE_FOG_UPPER_BOUND);
+        if (processorType <= Processor.PROCESSOR_TYPE_FOG_4) {
+            this.isFog = true;
         } else {
-            this.processingRate = RandomUtils.getRandomIntInRange(PROCESSING_RATE_CLOUD_LOWER_BOUND, PROCESSING_RATE_CLOUD_UPPER_BOUND);
-            this.ram = RandomUtils.getRandomElement(RAM_CLOUD);
-            this.storage = RandomUtils.getRandomIntInRange(STORAGE_CLOUD_LOWER_BOUND, STORAGE_CLOUD_UPPER_BOUND);
+            this.isFog = false;
         }
 
-        this.wanUploadBandwidth = RandomUtils.getRandomIntInRange(BANDWIDTH_WAN_LOWER_BOUND, BANDWIDTH_WAN_UPPER_BOUND);
-        this.wanDownloadBandwidth = RandomUtils.getRandomIntInRange(BANDWIDTH_WAN_LOWER_BOUND, BANDWIDTH_WAN_UPPER_BOUND);
+        this.noOfCores = Processor.NUMBER_OF_CORES[processorType];
+        this.processingRate = Processor.PROCESSING_RATES[processorType];
+        this.costPerTimeUnit = Processor.COST_PER_TIME_UNIT[processorType];
+
+        this.wanUploadBandwidth = wanUploadBandwidth;
+        this.wanDownloadBandwidth = wanDownloadBandwidth;
     }
 
-    public int getProcessingRate() {
+    public double getProcessingRate() {
         return this.processingRate;
     }
 
-    public void setProcessingRate(int processingRate) {
+    public void setProcessingRate(double processingRate) {
         this.processingRate = processingRate;
     }
 
@@ -104,11 +135,31 @@ public class Processor {
         return this.isFog;
     }
 
+    public void setIsFog(boolean isFog) {
+        this.isFog = isFog;
+    }
+
     public int getId() {
         return this.id;
     }
 
     public void setId(int id) {
         this.id = id;
+    }
+
+    public int getNoOfCores() {
+        return this.noOfCores;
+    }
+
+    public void setNoOfCores(int noOfCores) {
+        this.noOfCores = noOfCores;
+    }
+
+    public double getCostPerTimeUnit() {
+        return this.costPerTimeUnit;
+    }
+
+    public void setCostPerTimeUnit(double costPerTimeUnit) {
+        this.costPerTimeUnit = costPerTimeUnit;
     }
 }
