@@ -7,6 +7,7 @@ public class ScheduleResult {
     private double makespan;
     private int noOfCloudNodesUsed;
     private int noOfFogNodesUsed;
+    private int noOfSlots;
     private double earlyTime;
     private double lateTime;
     private double percentageEarly;
@@ -18,6 +19,7 @@ public class ScheduleResult {
         this.ast = schedule.getTaskExecutionSlot().get(0).getStartTime();
         this.aft = schedule.getAFT();
         this.makespan = schedule.getAFT() - schedule.getTaskDAG().getArrivalTime();
+        this.noOfSlots = schedule.countSlotsInNetwork();
 
         if (this.makespan <= this.taskDAG.getDeadline()) {
             this.isAccepted = true;
@@ -44,6 +46,9 @@ public class ScheduleResult {
         System.out.println("AST: " + this.ast + ", AFT: " + this.aft);
         System.out.println("CCR: " + this.taskDAG.getCCR() +
                 ", noOfClouds: " + this.noOfCloudNodesUsed + ", noOfFogs: " + this.noOfFogNodesUsed);
+        if (this.isAccepted) {
+            System.out.println("No of slots: " + this.noOfSlots);
+        }
         System.out.println("=========================================================");
     }
 

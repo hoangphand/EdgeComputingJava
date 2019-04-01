@@ -1,7 +1,9 @@
 package com.company;
 
 import java.io.BufferedReader;
+import java.io.BufferedWriter;
 import java.io.FileReader;
+import java.io.FileWriter;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
@@ -218,7 +220,83 @@ public class TaskDAG {
         return noOfLinks;
     }
 
-    public void exportDag(String outputFilePath) {
+    public void setArrivalTime(double arrivalTime) {
+        this.arrivalTime = arrivalTime;
+    }
 
+    public void exportDAG(String outputFilePath) {
+        try {
+            BufferedWriter writer = new BufferedWriter(new FileWriter(outputFilePath));
+
+            int noOfTasks = (this.tasks.size() - 2);
+
+            writer.write(String.valueOf(noOfTasks));
+            writer.newLine();
+
+            int maxIdWidth = "id".length();
+            int maxComputationWidth = "computation".length();
+            int maxStorageWidth = "storage".length();
+            int maxMemoryWidth = "memory".length();
+            int maxPredWidth = "no_of_preds".length();
+
+            int maxWidthPred = maxIdWidth + maxComputationWidth + maxMemoryWidth + maxPredWidth + 6 * "\t".length();
+
+            String header = String.format("%-" + maxIdWidth + "s\t\t%-" +
+                            maxComputationWidth + "s\t\t%-" +
+                            maxStorageWidth + "s\t\t%-" +
+                            maxMemoryWidth + "s\t\t%-" +
+                            maxPredWidth + "s",
+                    "id", "computation", "storage", "memory", "no_of_preds");
+            writer.write(header);
+            writer.newLine();
+
+            for (int index = 0; index < this.tasks.size(); index++) {
+                writer.write(String.format("%-" + maxIdWidth + "s", index));
+                writer.write("\t\t");
+                writer.write(String.format("%-" + maxComputationWidth + "s", this.tasks.get(index).getComputationRequired()));
+                writer.write("\t\t");
+                writer.write(String.format("%-" + maxStorageWidth + "s", this.tasks.get(index).getStorageRequired()));
+                writer.write("\t\t");
+                writer.write(String.format("%-" + maxMemoryWidth + "s", this.tasks.get(index).getMemoryRequired()));
+                writer.write("\t\t");
+                writer.write(String.format("%-" + maxPredWidth + "s", this.tasks.get(index).getPredecessors().size()));
+                writer.newLine();
+
+                for (int i = 0; i < this.tasks.get(index).getPredecessors().size(); i++) {
+//                    if (this.tasks.get(index).getPredecessors().get(i).)
+                    writer.write(String.format("%-" + maxWidthPred + "s\t\t\t\t\t" +
+                            this.tasks.get(index).getPredecessors().get(i).getTask().getId() + "\t\t" +
+                            this.tasks.get(index).getPredecessors().get(i).getDataConstraint(), " "));
+                    writer.newLine();
+                }
+            }
+
+            writer.write("makespanHEFT: " + this.makespanHEFT);
+            writer.newLine();
+            writer.write("k: " + this.k);
+            writer.newLine();
+            writer.write("deadline: " + this.deadline);
+            writer.newLine();
+            writer.write("arrivalTime: " + this.arrivalTime);
+            writer.newLine();
+            writer.write("ccr: " + this.ccr);
+            writer.newLine();
+            writer.write("alpha: " + this.alpha);
+            writer.newLine();
+            writer.write("height: " + this.height);
+            writer.newLine();
+
+            for (int i = 0; i < this.layers.size(); i++) {
+                for (int j = 0; j < this.layers.get(i).size(); j++) {
+                    writer.write(this.layers.get(i).get(j).getId() + " ");
+                }
+
+                writer.newLine();
+            }
+
+            writer.close();
+        } catch (Exception exception) {
+            exception.printStackTrace();
+        }
     }
 }

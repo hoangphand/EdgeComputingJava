@@ -10,6 +10,7 @@ public class Schedule {
     private ArrayList<Slot> taskExecutionSlot;
     private ArrayList<ArrayList<Slot>> processorCoreExecutionSlots;
     private double aft;
+    private double ast;
 
     public Schedule(TaskDAG taskDAG, ProcessorDAG processorDAG) {
         this.taskDAG = taskDAG;
@@ -47,14 +48,17 @@ public class Schedule {
         );
 
         double computationTime = task.getComputationRequired() / processorCore.getProcessor().getProcessingRate();
-        double endTime = startTime + computationTime;
 
+        int count = 0;
         for (int i = 0; i < currentProcessorCoreSlots.size(); i++) {
             Slot currentSlot = currentProcessorCoreSlots.get(i);
+            count = i;
+            double actualStartTime = Math.max(startTime, currentSlot.getStartTime());
+            double endTime = actualStartTime + computationTime;
 
 //            find the first slot on the processor that fits the startTime and endTime
             if (currentSlot.getTask() == null &&
-                    currentSlot.getStartTime() <= startTime &&
+                    currentSlot.getStartTime() <= actualStartTime &&
                     currentSlot.getEndTime() >= endTime) {
                 Slot newSlot = new Slot(task, processorCore, startTime, endTime);
                 currentProcessorCoreSlots.add(newSlot);
@@ -79,6 +83,11 @@ public class Schedule {
                 break;
             }
         }
+
+        if (count == currentProcessorCoreSlots.size() - 1) {
+            System.out.println("Found no suitable slots on processor " + processorCore.getProcessor().getId() +
+                    " core " + processorCore.getCoreId() + "!");
+        }
     }
 
 //    this function calculates the earliest slot that a processor
@@ -96,6 +105,7 @@ public class Schedule {
 //            get dependency of current predecessor
             double predTaskConstraint = task.getPredecessors().get(i).getDataConstraint();
 //            get processor which processes the current predecessor task
+//            System.out.println("current pred: " + predTask.getId());
             ProcessorCore predProcessorCore = this.taskExecutionSlot.get(predTask.getId()).getProcessorCore();
 
 //            calculate communication time to transmit data dependency from
@@ -219,7 +229,7 @@ public class Schedule {
         return this.taskDAG.getTasks().size() - this.getNoOfTasksAllocatedToCloudNodes() - 2;
     }
 
-    public ProcessorCore getFirstProcessorFreeAt(double time) {
+    public ProcessorCore getFirstProcessorCoreFreeAt(double time) {
         ProcessorCore selectedProcessorCore = null;
         double earliestStartTime = Double.MAX_VALUE;
 
@@ -227,17 +237,15 @@ public class Schedule {
             for (int slotId = 0; slotId < this.processorCoreExecutionSlots.get(positionId).size(); slotId++) {
                 Slot currentSlot = this.processorCoreExecutionSlots.get(positionId).get(slotId);
 
-                if (currentSlot.getTask() == null && currentSlot.getStartTime() <= time && currentSlot.getEndTime() >= time) {
-                    if (currentSlot.getStartTime() < earliestStartTime) {
-                        earliestStartTime = currentSlot.getStartTime();
+                if (currentSlot.getTask() == null && currentSlot.getEndTime() >= time) {
+                    if (Math.max(currentSlot.getStartTime(), time) <= earliestStartTime) {
+                        earliestStartTime = Math.max(currentSlot.getStartTime(), time);
                         selectedProcessorCore = this.processorCoreExecutionSlots.get(positionId).get(0).getProcessorCore();
                     }
                 }
             }
         }
 
-//        System.out.println("Found " + selectedProcessor.getId() + " at " + earliestStartTime +
-//                " with slot[" + selectedSlot.getStartTime() + "--" + selectedSlot.getEndTime() + "]");
         return selectedProcessorCore;
     }
 
@@ -257,6 +265,14 @@ public class Schedule {
 
     public double getAFT() {
         return this.aft;
+    }
+
+    public void setAST(double ast) {
+        this.ast = ast;
+    }
+
+    public double getAST() {
+        return this.ast;
     }
 
     public ProcessorDAG getProcessorDAG() {
@@ -325,5 +341,24 @@ public class Schedule {
 
     public TaskDAG getTaskDAG() {
         return this.taskDAG;
+    }
+
+    public double getActualStartTimeOfDAG() {
+        double actualStartTime = Double.MAX_VALUE;
+
+        for (int i = 0; i < this.taskDAG.getLayers().get(1).size(); i++) {
+            Task currentTask = this.taskDAG.getLayers().get(1).get(i);
+            Slot currentTaskSlot = this.taskExecutionSlot.get(currentTask.getId());
+
+            if (actualStartTime > currentTaskSlot.getStartTime()) {
+                actualStartTime = currentTaskSlot.getStartTime();
+            }
+        }
+
+        return actualStartTime;
+    }
+
+    public double getActualWaitingTime() {
+        return this.ast - this.taskDAG.getArrivalTime();
     }
 }

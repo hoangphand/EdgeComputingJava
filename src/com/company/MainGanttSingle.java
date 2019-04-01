@@ -31,9 +31,9 @@ public class MainGanttSingle extends JFrame {
     }
 
     public static void main(String[] args) {
-        ProcessorDAG processorDAG = new ProcessorDAG("dataset/processors.dag");
+        ProcessorDAG processorDAG = new ProcessorDAG("dataset-GHz/processors.dag");
 
-        TaskDAG taskDAG = new TaskDAG(1, "dataset/12.dag");
+        TaskDAG taskDAG = new TaskDAG(1, "dataset-GHz/1.dag");
         Schedule schedule = Heuristics.HEFT(taskDAG, processorDAG);
         double makespan = schedule.getAFT();
 

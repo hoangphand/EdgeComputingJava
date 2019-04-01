@@ -31,11 +31,11 @@ public class MainGanttMultiple extends JFrame {
     }
 
     public static void main(String[] args) {
-        int noOfDAGsToTest = 2;
+        int noOfDAGsToTest = 100;
 
-        ProcessorDAG processorDAG = new ProcessorDAG("dataset/processors.dag");
+        ProcessorDAG processorDAG = new ProcessorDAG("dataset-GHz/processors.dag");
 
-        TaskDAG taskDAG = new TaskDAG(1, "dataset/1.dag");
+        TaskDAG taskDAG = new TaskDAG(1, "dataset-GHz/1.dag");
         Schedule schedule = Heuristics.HEFT(taskDAG, processorDAG);
         double makespan = schedule.getAFT();
 
@@ -45,15 +45,20 @@ public class MainGanttMultiple extends JFrame {
         int noOfAcceptedRequests = 1;
 
         for (int id = 2; id < noOfDAGsToTest + 1; id++) {
-            taskDAG = new TaskDAG(id, "dataset/" + id + ".dag");
+            taskDAG = new TaskDAG(id, "dataset-GHz/" + id + ".dag");
 
             Schedule tmpSchedule = Heuristics.DynamicHEFT(schedule, taskDAG);
+
+//            System.out.println("Actual waiting time: " + tmpSchedule.getActualWaitingTime());
+
             ScheduleResult tmpScheduleResult = new ScheduleResult(tmpSchedule);
 
             if (tmpScheduleResult.isAccepted()) {
                 schedule.setProcessorExecutionSlots(tmpSchedule.getProcessorCoreExecutionSlots());
                 noOfAcceptedRequests += 1;
             }
+
+            System.out.println("Actual waiting time: " + schedule.getActualWaitingTime());
 
             tmpScheduleResult.print();
         }
