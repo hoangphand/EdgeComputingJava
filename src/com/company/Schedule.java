@@ -80,7 +80,7 @@ public class Schedule {
 
 //    this function calculates the earliest slot that a processor
 //    which will be able to execute a specified task
-    public Slot getFirstFitSlotForTaskOnProcessor(ProcessorCore processorCore, Task task) {
+    public Slot getFirstFitSlotForTaskOnProcessorCore(ProcessorCore processorCore, Task task) {
 //        the ready time of the task at which
 //        all required input data has arrived at the current processor
         double readyTime = -1;

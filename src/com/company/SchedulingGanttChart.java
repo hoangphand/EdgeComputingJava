@@ -33,16 +33,16 @@ public class SchedulingGanttChart {
         XYPlot plot = (XYPlot) chart.getPlot();
         plot.setRangePannable(true);
 
-        String[] resourceNames = new String[schedule.getProcessorDAG().getProcessors().size()];
+        String[] resourceNames = new String[schedule.getProcessorCoreExecutionSlots().size()];
 
-        for (int i = 0; i < schedule.getProcessorDAG().getProcessors().size(); i++) {
-            Processor currentProcessor = schedule.getProcessorDAG().getProcessors().get(i);
+        for (int i = 0; i < schedule.getProcessorCoreExecutionSlots().size(); i++) {
+            ProcessorCore currentProcessorCore = schedule.getProcessorCoreExecutionSlots().get(i).get(0).getProcessorCore();
             String processorName = "";
 
-            if (currentProcessor.isFog()) {
-                processorName = "Fog " + currentProcessor.getId();
+            if (currentProcessorCore.getProcessor().isFog()) {
+                processorName = "Fog " + currentProcessorCore.getProcessor().getId();
             } else {
-                processorName = "Cloud " + currentProcessor.getId();
+                processorName = "Cloud " + currentProcessorCore.getProcessor().getId() + " core " + currentProcessorCore.getCoreId();
             }
 
             resourceNames[i] = processorName;
@@ -65,14 +65,14 @@ public class SchedulingGanttChart {
     private IntervalXYDataset getCategoryDataset(Schedule schedule) {
         TaskSeriesCollection dataset = new TaskSeriesCollection();
 
-        for (int i = 0; i < schedule.getProcessorDAG().getProcessors().size(); i++) {
-            Processor currentProcessor = schedule.getProcessorDAG().getProcessors().get(i);
+        for (int i = 0; i < schedule.getProcessorCoreExecutionSlots().size(); i++) {
+            ProcessorCore currentProcessorCore = schedule.getProcessorCoreExecutionSlots().get(i).get(0).getProcessorCore();
             String processorName = "";
 
-            if (currentProcessor.isFog()) {
-                processorName = "Fog " + currentProcessor.getId();
+            if (currentProcessorCore.getProcessor().isFog()) {
+                processorName = "Fog " + currentProcessorCore.getProcessor().getId();
             } else {
-                processorName = "Cloud " + currentProcessor.getId();
+                processorName = "Cloud " + currentProcessorCore.getProcessor().getId() + " core " + currentProcessorCore.getCoreId();
             }
 
             TaskSeries taskSeries = new TaskSeries(processorName);

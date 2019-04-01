@@ -31,7 +31,7 @@ public class Heuristics {
             for (int i = 0; i < schedule.getProcessorCoreExecutionSlots().size(); i++) {
                 ProcessorCore currentProcessorCore = schedule.getProcessorCoreExecutionSlots().get(i).get(0).getProcessorCore();
 //                find the first-fit slot on the current processor for the current task
-                Slot currentSelectedSlot = schedule.getFirstFitSlotForTaskOnProcessor(currentProcessorCore, currentTask);
+                Slot currentSelectedSlot = schedule.getFirstFitSlotForTaskOnProcessorCore(currentProcessorCore, currentTask);
 
                 if (selectedSlot == null || currentSelectedSlot.getEndTime() < selectedSlot.getEndTime()) {
                     selectedSlot = currentSelectedSlot;
@@ -68,7 +68,7 @@ public class Heuristics {
 
             for (int i = 0; i < tmpSchedule.getProcessorCoreExecutionSlots().size(); i++) {
                 ProcessorCore currentProcessorCore = tmpSchedule.getProcessorCoreExecutionSlots().get(i).get(0).getProcessorCore();
-                Slot currentSelectedSlot = tmpSchedule.getFirstFitSlotForTaskOnProcessor(currentProcessorCore, currentTask);
+                Slot currentSelectedSlot = tmpSchedule.getFirstFitSlotForTaskOnProcessorCore(currentProcessorCore, currentTask);
 
                 if (selectedSlot == null || currentSelectedSlot.getEndTime() < selectedSlot.getEndTime()) {
                     selectedSlot = currentSelectedSlot;
