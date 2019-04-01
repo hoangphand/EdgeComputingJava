@@ -15,6 +15,7 @@ public class Schedule {
         this.taskDAG = taskDAG;
         this.processorDAG = processorDAG;
 
+//        count variable for indexing processorCores
         int schedulePositionId = 0;
         this.processorCoreExecutionSlots = new ArrayList<ArrayList<Slot>>();
         for (int i = 0; i < processorDAG.getProcessors().size(); i++) {
@@ -28,6 +29,8 @@ public class Schedule {
                 newListOfSlots.add(newSlot);
 
                 this.processorCoreExecutionSlots.add(newListOfSlots);
+
+                schedulePositionId += 1;
             }
         }
 
