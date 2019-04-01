@@ -1,10 +1,10 @@
 100
 id		computation		storage		memory		no_of_preds
-0 		0          		0      		0     		0          
+0 		0.0        		0.0    		0.0   		0          
 1 		0.47       		15.94  		8.98  		1          
-                                    					0		0
+                                    					0		0.0
 2 		1.17       		15.06  		16.44 		1          
-                                    					0		0
+                                    					0		0.0
 3 		0.64       		7.36   		7.83  		2          
                                     					1		12.91
                                     					2		27.76
@@ -1676,13 +1676,13 @@ id		computation		storage		memory		no_of_preds
                                     					97		29.9
                                     					98		33.53
                                     					99		37.27
-101		0          		0      		0     		1          
-                                    					100		0
+101		0.0        		0.0    		0.0   		1          
+                                    					100		0.0
 makespanHEFT: 7.69024390244
 k: 1.2
 deadline: 9.22829268293
-arrivalTime: 9.6
-ccr: 1
+arrivalTime: 57.600000000000094
+ccr: 1.0
 alpha: 0.5
 height: 22
 0 
