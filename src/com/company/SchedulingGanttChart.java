@@ -52,7 +52,7 @@ public class SchedulingGanttChart {
         plot.setDomainAxis(xAxis);
 
         DateAxis range = new DateAxis("Time");
-        range.setDateFormatOverride(new SimpleDateFormat("ss.SSS"));
+        range.setDateFormatOverride(new SimpleDateFormat("m.ss.SSS"));
         plot.setRangeAxis(range);
         XYBarRenderer renderer = (XYBarRenderer) plot.getRenderer();
         renderer.setUseYInterval(true);

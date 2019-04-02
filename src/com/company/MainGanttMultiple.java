@@ -49,7 +49,10 @@ public class MainGanttMultiple extends JFrame {
 
             Schedule tmpSchedule = Heuristics.DynamicHEFT(schedule, taskDAG);
 
-//            System.out.println("Actual waiting time: " + tmpSchedule.getActualWaitingTime());
+            if (tmpSchedule.getActualStartTimeOfDAG() != taskDAG.getArrivalTime()) {
+                System.out.println("Actual start time: " + tmpSchedule.getActualStartTimeOfDAG());
+                System.out.println("Actual waiting time: " + tmpSchedule.getActualWaitingTime());
+            }
 
             ScheduleResult tmpScheduleResult = new ScheduleResult(tmpSchedule);
 
@@ -57,8 +60,6 @@ public class MainGanttMultiple extends JFrame {
                 schedule.setProcessorExecutionSlots(tmpSchedule.getProcessorCoreExecutionSlots());
                 noOfAcceptedRequests += 1;
             }
-
-            System.out.println("Actual waiting time: " + schedule.getActualWaitingTime());
 
             tmpScheduleResult.print();
         }
