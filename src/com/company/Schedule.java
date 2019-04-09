@@ -147,6 +147,63 @@ public class Schedule {
         return new Slot(task, processorCore, -1, -1);
     }
 
+    //    this function calculates the earliest slot that a processor
+//    which will be able to execute a specified task
+    public Slot getBestProcessorCoreForAStepFurtherHEFT(ProcessorCore processorCore, Task task) {
+//        the ready time of the task at which
+//        all required input data has arrived at the current processor
+        double readyTime = -1;
+
+//        loop through all predecessors of the current task
+//        to calculate readyTime
+        for (int i = 0; i < task.getPredecessors().size(); i++) {
+//            get predecessor task in the tuple of (task, dependency)
+            Task predTask = task.getPredecessors().get(i).getTask();
+//            get dependency of current predecessor
+            double predTaskConstraint = task.getPredecessors().get(i).getDataConstraint();
+//            get processor which processes the current predecessor task
+//            System.out.println("current pred: " + predTask.getId());
+            ProcessorCore predProcessorCore = this.taskExecutionSlot.get(predTask.getId()).getProcessorCore();
+
+//            calculate communication time to transmit data dependency from
+//            processor which is assigned to process the predecessor task to
+//            the processor which is being considered to use to process the current task
+            double communicationTime = this.processorDAG.getCommunicationTimeBetweenCores(
+                    predProcessorCore, processorCore, predTaskConstraint
+            );
+
+            double predSlotEndTime = this.taskExecutionSlot.get(predTask.getId()).getEndTime();
+            double currentReadyTime = predSlotEndTime + communicationTime;
+
+            if (currentReadyTime > readyTime) {
+                readyTime = currentReadyTime;
+            }
+        }
+
+        double processingTime = task.getComputationRequired() / processorCore.getProcessor().getProcessingRate();
+        ArrayList<Slot> currentProcessorSlots = this.processorCoreExecutionSlots.get(
+                processorCore.getSchedulePositionId()
+        );
+
+//        find the earliest slot
+        for (int i = 0; i < currentProcessorSlots.size(); i++) {
+            Slot currentSlot = currentProcessorSlots.get(i);
+
+            if (currentSlot.getTask() == null) {
+                double actualStart = Math.max(currentSlot.getStartTime(), readyTime);
+                double actualEnd = actualStart + processingTime;
+
+                if (actualEnd <= currentSlot.getEndTime()) {
+//                    return the first fit slot for the task on the current processor
+                    return new Slot(task, processorCore, actualStart, actualEnd);
+                }
+            }
+        }
+
+        System.out.println("Nothing");
+        return new Slot(task, processorCore, -1, -1);
+    }
+
     public double getTotalComputationCost() {
         double totalComputationCost = 0;
 
@@ -360,5 +417,14 @@ public class Schedule {
 
     public double getActualWaitingTime() {
         return this.ast - this.taskDAG.getArrivalTime();
+    }
+
+    public void deepCopy(Schedule schedule) {
+        this.aft = schedule.aft;
+        this.ast = schedule.ast;
+        this.taskDAG = schedule.taskDAG;
+        this.processorCoreExecutionSlots = schedule.processorCoreExecutionSlots;
+        this.processorDAG = schedule.processorDAG;
+        this.taskExecutionSlot = schedule.taskExecutionSlot;
     }
 }

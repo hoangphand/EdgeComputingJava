@@ -42,7 +42,7 @@ public class MainGanttSingle extends JFrame {
 
         SwingUtilities.invokeLater(() -> {
             MainGanttSingle example = new MainGanttSingle("Gantt Chart", schedule);
-            example.setSize(800, 400);
+            example.setSize(1200, 700);
             example.setLocationRelativeTo(null);
             example.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
             example.setVisible(true);

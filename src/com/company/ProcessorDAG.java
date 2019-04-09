@@ -123,6 +123,11 @@ public class ProcessorDAG {
         return (this.getTotalUploadBandwidth() + this.getTotalDownloadBandwidth()) / (2 * (this.noOfFogs + this.noOfClouds));
     }
 
+    public double getAvgBandwidthWithLAN() {
+        return (this.getTotalUploadBandwidth() + this.getTotalDownloadBandwidth() + 2 * this.noOfFogs * Processor.BANDWIDTH_LAN) /
+                (2 * (this.noOfFogs + this.noOfClouds) + 2 * this.noOfFogs);
+    }
+
     public int getBandwidthToUse(Processor fromProcessor, Processor toProcessor) {
         int bandwidthToUse;
 
