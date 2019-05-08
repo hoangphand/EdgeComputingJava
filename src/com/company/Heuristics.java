@@ -244,7 +244,8 @@ public class Heuristics {
 
         return schedule;
     }
-    public static Schedule AStepFurtherHEFTAdjacent(TaskDAG taskDAG, ProcessorDAG processorDAG) {
+
+    public static Schedule AStepFurtherHEFTAdjacentAvg(TaskDAG taskDAG, ProcessorDAG processorDAG) {
         Schedule schedule = new Schedule(taskDAG, processorDAG);
 //        prioritize tasks
 //        init list of unscheduled tasks
@@ -259,9 +260,6 @@ public class Heuristics {
 //        loop through all unscheduled tasks
         while (unscheduledTasks.size() > 0) {
             Task currentTask = taskDAG.getTasks().get(unscheduledTasks.removeLast().getId());
-            System.out.println("Current task: " + currentTask.getId());
-
-            System.out.println("No of successor: " + currentTask.getSuccessors().size());
 
             double totalAdjacentDataConstraint = 0;
             int noOfSuccessorsAdjacentLayer = 0;
@@ -274,7 +272,6 @@ public class Heuristics {
                     noOfSuccessorsAdjacentLayer += 1;
                 }
             }
-            System.out.println("No of successor in adjacent layer: " + noOfSuccessorsAdjacentLayer);
 
             double avgDataConstraint;
 
@@ -327,12 +324,6 @@ public class Heuristics {
                     }
                 }
 
-                System.out.println("Current processor " + currentProcessorCore.getProcessor().getId() +
-                        " current core " + currentProcessorCore.getCoreId() +
-                        " ends at " + currentSelectedSlot.getEndTime() +
-                        ", communication time: " + avgCommunicationTime + " equals " +
-                        (currentSelectedSlot.getEndTime() + avgCommunicationTime));
-
                 if (selectedSlot == null || currentSelectedSlot.getEndTime() + avgCommunicationTime < minAStepFurtherCost) {
                     selectedSlot = currentSelectedSlot;
                     selectedProcessorCore = currentProcessorCore;
@@ -340,16 +331,262 @@ public class Heuristics {
                 }
             }
 
-            System.out.println("Select processor " + selectedProcessorCore.getProcessor().getId() +
-                    " core " + selectedProcessorCore.getCoreId() +
-                    ", ASF HEFT time: " + minAStepFurtherCost);
-            System.out.println("============================================");
             schedule.addNewSlot(selectedProcessorCore, currentTask, selectedSlot.getStartTime());
         }
 
         schedule.setAFT(schedule.getTaskExecutionSlot().get(taskDAG.getTasks().size() - 1).getEndTime());
 
         return schedule;
+    }
+
+    public static Schedule DynamicASFHEFTAdjacentAvg(Schedule schedule, TaskDAG taskDAG) {
+        Schedule tmpSchedule = new Schedule(schedule, taskDAG);
+//        prioritize tasks
+//        init list of unscheduled tasks
+        LinkedList<Task> unscheduledTasks = Heuristics.prioritizeTasks(taskDAG, tmpSchedule.getProcessorDAG());
+//        get the entry task by popping the first task from the unscheduled list
+        Task entryTask = unscheduledTasks.removeLast();
+//        get the most powerful processor in the network
+        ProcessorCore selectedProcessorCoreForEntryTask = schedule.getFirstProcessorCoreFreeAt(taskDAG.getArrivalTime());
+//        allocate dummy entry task on the most powerful processing node at timestamp 0
+        tmpSchedule.addNewSlot(selectedProcessorCoreForEntryTask, entryTask, taskDAG.getArrivalTime());
+
+//        loop through all unscheduled tasks
+        while (unscheduledTasks.size() > 0) {
+            Task currentTask = taskDAG.getTasks().get(unscheduledTasks.removeLast().getId());
+
+            double totalAdjacentDataConstraint = 0;
+            int noOfSuccessorsAdjacentLayer = 0;
+
+            for (int j = 0; j < currentTask.getSuccessors().size(); j++) {
+                DataDependency currentSuccessor = currentTask.getSuccessors().get(j);
+
+                if (currentSuccessor.getTask().getLayerId() == currentTask.getLayerId() + 1) {
+                    totalAdjacentDataConstraint += currentTask.getSuccessors().get(j).getDataConstraint();
+                    noOfSuccessorsAdjacentLayer += 1;
+                }
+            }
+
+            double avgDataConstraint;
+
+            if (noOfSuccessorsAdjacentLayer == 0) {
+                avgDataConstraint = 0;
+            } else {
+                avgDataConstraint = totalAdjacentDataConstraint / noOfSuccessorsAdjacentLayer;
+            }
+
+//            calculate ready time to calculate current task on all the processors in the network
+            Slot selectedSlot = null;
+            double minAStepFurtherCost = Double.MAX_VALUE;
+            ProcessorCore selectedProcessorCore = null;
+
+//            loop through all processors to find the best processing execution location
+            for (int i = 0; i < tmpSchedule.getProcessorCoreExecutionSlots().size(); i++) {
+                ProcessorCore currentProcessorCore = tmpSchedule.getProcessorCoreExecutionSlots().get(i).get(0).getProcessorCore();
+//                find the first-fit slot on the current processor for the current task
+                Slot currentSelectedSlot = tmpSchedule.getFirstFitSlotForTaskOnProcessorCore(currentProcessorCore, currentTask);
+
+                double avgCommunicationTime = 0;
+
+                if (currentProcessorCore.getProcessor().isFog()) {
+                    if (noOfSuccessorsAdjacentLayer <= tmpSchedule.getProcessorDAG().getNoOfFogs()) {
+                        avgCommunicationTime = avgDataConstraint / Processor.BANDWIDTH_LAN;
+                    } else {
+                        for (int j = 0; j < currentTask.getSuccessors().size(); j++) {
+                            DataDependency currentSuccessor = currentTask.getSuccessors().get(j);
+
+                            if (currentSuccessor.getTask().getLayerId() == currentTask.getLayerId() + 1) {
+                                avgCommunicationTime += currentTask.getSuccessors().get(j).getDataConstraint() /
+                                        currentProcessorCore.getProcessor().getWanUploadBandwidth();
+                            }
+                        }
+                        avgCommunicationTime = avgCommunicationTime / totalAdjacentDataConstraint;
+                    }
+                } else {
+                    if (noOfSuccessorsAdjacentLayer <= currentProcessorCore.getProcessor().getNoOfCores()) {
+                        avgCommunicationTime = 0;
+                    } else {
+                        for (int j = 0; j < currentTask.getSuccessors().size(); j++) {
+                            DataDependency currentSuccessor = currentTask.getSuccessors().get(j);
+
+                            if (currentSuccessor.getTask().getLayerId() == currentTask.getLayerId() + 1) {
+                                avgCommunicationTime += currentTask.getSuccessors().get(j).getDataConstraint() /
+                                        currentProcessorCore.getProcessor().getWanUploadBandwidth();
+                            }
+                        }
+                        avgCommunicationTime = avgCommunicationTime / totalAdjacentDataConstraint;
+                    }
+                }
+
+                if (selectedSlot == null || currentSelectedSlot.getEndTime() + avgCommunicationTime < minAStepFurtherCost) {
+                    selectedSlot = currentSelectedSlot;
+                    selectedProcessorCore = currentProcessorCore;
+                    minAStepFurtherCost = currentSelectedSlot.getEndTime() + avgCommunicationTime;
+                }
+            }
+            tmpSchedule.addNewSlot(selectedProcessorCore, currentTask, selectedSlot.getStartTime());
+        }
+
+        tmpSchedule.setAFT(tmpSchedule.getTaskExecutionSlot().get(taskDAG.getTasks().size() - 1).getEndTime());
+        tmpSchedule.setAST(tmpSchedule.getActualStartTimeOfDAG());
+
+        return tmpSchedule;
+    }
+
+    public static Schedule AStepFurtherHEFTAdjacentMax(TaskDAG taskDAG, ProcessorDAG processorDAG) {
+        Schedule schedule = new Schedule(taskDAG, processorDAG);
+//        prioritize tasks
+//        init list of unscheduled tasks
+        LinkedList<Task> unscheduledTasks = Heuristics.prioritizeTasks(taskDAG, processorDAG);
+//        get the entry task by popping the first task from the unscheduled list
+        Task entryTask = unscheduledTasks.removeLast();
+//        get the most powerful processor in the network
+//        Processor mostPowerfulProcessor = processorDAG.getTheMostPowerfulProcessor();
+//        allocate dummy entry task on the most powerful processing node at timestamp 0
+        schedule.addNewSlot(schedule.getFirstProcessorCoreFreeAt(0), entryTask, 0);
+
+//        loop through all unscheduled tasks
+        while (unscheduledTasks.size() > 0) {
+            Task currentTask = taskDAG.getTasks().get(unscheduledTasks.removeLast().getId());
+
+            double totalAdjacentDataConstraint = 0;
+            int noOfSuccessorsAdjacentLayer = 0;
+
+            for (int j = 0; j < currentTask.getSuccessors().size(); j++) {
+                DataDependency currentSuccessor = currentTask.getSuccessors().get(j);
+
+                if (currentSuccessor.getTask().getLayerId() == currentTask.getLayerId() + 1) {
+                    totalAdjacentDataConstraint += currentTask.getSuccessors().get(j).getDataConstraint();
+                    noOfSuccessorsAdjacentLayer += 1;
+                }
+            }
+
+            double avgDataConstraint;
+
+            if (noOfSuccessorsAdjacentLayer == 0) {
+                avgDataConstraint = 0;
+            } else {
+                avgDataConstraint = totalAdjacentDataConstraint / noOfSuccessorsAdjacentLayer;
+            }
+
+//            calculate ready time to calculate current task on all the processors in the network
+            Slot selectedSlot = null;
+            double minAStepFurtherCost = Double.MAX_VALUE;
+            ProcessorCore selectedProcessorCore = null;
+
+//            loop through all processors to find the best processing execution location
+            for (int i = 0; i < schedule.getProcessorCoreExecutionSlots().size(); i++) {
+                ProcessorCore currentProcessorCore = schedule.getProcessorCoreExecutionSlots().get(i).get(0).getProcessorCore();
+//                find the first-fit slot on the current processor for the current task
+                Slot currentSelectedSlot = schedule.getFirstFitSlotForTaskOnProcessorCore(currentProcessorCore, currentTask);
+
+                double maxCommunicationTime = -1;
+
+                if (currentProcessorCore.getProcessor().isFog()) {
+                    if (noOfSuccessorsAdjacentLayer <= processorDAG.getNoOfFogs()) {
+                        maxCommunicationTime = avgDataConstraint / Processor.BANDWIDTH_LAN;
+                    } else {
+                        maxCommunicationTime = avgDataConstraint / currentProcessorCore.getProcessor().getWanUploadBandwidth();
+                    }
+                } else {
+                    if (noOfSuccessorsAdjacentLayer <= currentProcessorCore.getProcessor().getNoOfCores()) {
+                        maxCommunicationTime = 0;
+                    } else {
+                        maxCommunicationTime = avgDataConstraint / currentProcessorCore.getProcessor().getWanUploadBandwidth();
+                    }
+                }
+
+                if (selectedSlot == null || currentSelectedSlot.getEndTime() + maxCommunicationTime < minAStepFurtherCost) {
+                    selectedSlot = currentSelectedSlot;
+                    selectedProcessorCore = currentProcessorCore;
+                    minAStepFurtherCost = currentSelectedSlot.getEndTime() + maxCommunicationTime;
+                }
+            }
+
+            schedule.addNewSlot(selectedProcessorCore, currentTask, selectedSlot.getStartTime());
+        }
+
+        schedule.setAFT(schedule.getTaskExecutionSlot().get(taskDAG.getTasks().size() - 1).getEndTime());
+
+        return schedule;
+    }
+
+    public static Schedule DynamicASFHEFTAdjacentMax(Schedule schedule, TaskDAG taskDAG) {
+        Schedule tmpSchedule = new Schedule(schedule, taskDAG);
+//        prioritize tasks
+//        init list of unscheduled tasks
+        LinkedList<Task> unscheduledTasks = Heuristics.prioritizeTasks(taskDAG, tmpSchedule.getProcessorDAG());
+//        get the entry task by popping the first task from the unscheduled list
+        Task entryTask = unscheduledTasks.removeLast();
+//        get the most powerful processor in the network
+        ProcessorCore selectedProcessorCoreForEntryTask = tmpSchedule.getFirstProcessorCoreFreeAt(taskDAG.getArrivalTime());
+//        allocate dummy entry task on the most powerful processing node at timestamp 0
+        tmpSchedule.addNewSlot(selectedProcessorCoreForEntryTask, entryTask, taskDAG.getArrivalTime());
+
+//        loop through all unscheduled tasks
+        while (unscheduledTasks.size() > 0) {
+            Task currentTask = taskDAG.getTasks().get(unscheduledTasks.removeLast().getId());
+
+            double totalAdjacentDataConstraint = 0;
+            int noOfSuccessorsAdjacentLayer = 0;
+
+            for (int j = 0; j < currentTask.getSuccessors().size(); j++) {
+                DataDependency currentSuccessor = currentTask.getSuccessors().get(j);
+
+                if (currentSuccessor.getTask().getLayerId() == currentTask.getLayerId() + 1) {
+                    totalAdjacentDataConstraint += currentTask.getSuccessors().get(j).getDataConstraint();
+                    noOfSuccessorsAdjacentLayer += 1;
+                }
+            }
+
+            double avgDataConstraint;
+
+            if (noOfSuccessorsAdjacentLayer == 0) {
+                avgDataConstraint = 0;
+            } else {
+                avgDataConstraint = totalAdjacentDataConstraint / noOfSuccessorsAdjacentLayer;
+            }
+
+//            calculate ready time to calculate current task on all the processors in the network
+            Slot selectedSlot = null;
+            double minAStepFurtherCost = Double.MAX_VALUE;
+            ProcessorCore selectedProcessorCore = null;
+
+//            loop through all processors to find the best processing execution location
+            for (int i = 0; i < tmpSchedule.getProcessorCoreExecutionSlots().size(); i++) {
+                ProcessorCore currentProcessorCore = tmpSchedule.getProcessorCoreExecutionSlots().get(i).get(0).getProcessorCore();
+//                find the first-fit slot on the current processor for the current task
+                Slot currentSelectedSlot = tmpSchedule.getFirstFitSlotForTaskOnProcessorCore(currentProcessorCore, currentTask);
+
+                double maxCommunicationTime = -1;
+
+                if (currentProcessorCore.getProcessor().isFog()) {
+                    if (noOfSuccessorsAdjacentLayer <= schedule.getProcessorDAG().getNoOfFogs()) {
+                        maxCommunicationTime = avgDataConstraint / Processor.BANDWIDTH_LAN;
+                    } else {
+                        maxCommunicationTime = avgDataConstraint / currentProcessorCore.getProcessor().getWanUploadBandwidth();
+                    }
+                } else {
+                    if (noOfSuccessorsAdjacentLayer <= currentProcessorCore.getProcessor().getNoOfCores()) {
+                        maxCommunicationTime = 0;
+                    } else {
+                        maxCommunicationTime = avgDataConstraint / currentProcessorCore.getProcessor().getWanUploadBandwidth();
+                    }
+                }
+
+                if (selectedSlot == null || currentSelectedSlot.getEndTime() + maxCommunicationTime < minAStepFurtherCost) {
+                    selectedSlot = currentSelectedSlot;
+                    selectedProcessorCore = currentProcessorCore;
+                    minAStepFurtherCost = currentSelectedSlot.getEndTime() + maxCommunicationTime;
+                }
+            }
+            tmpSchedule.addNewSlot(selectedProcessorCore, currentTask, selectedSlot.getStartTime());
+        }
+
+        tmpSchedule.setAFT(tmpSchedule.getTaskExecutionSlot().get(taskDAG.getTasks().size() - 1).getEndTime());
+        tmpSchedule.setAST(tmpSchedule.getActualStartTimeOfDAG());
+
+        return tmpSchedule;
     }
 
     public static LinkedList<Task> prioritizeTasks(TaskDAG taskDAG, ProcessorDAG processorDAG) {

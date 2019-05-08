@@ -20,6 +20,7 @@ public class Task {
     private static final double TASK_MEMORY_CONSTRAINT_UPPER_BOUND = 5f;
 
     private int id;
+    private int taskDAGId;
     private int layerId;
     private double computationRequired;
     private double memoryRequired;
@@ -30,8 +31,9 @@ public class Task {
     private ArrayList<DataDependency> predecessors;
     private ArrayList<DataDependency> successors;
 
-    public Task(int id, int layerId, double computationRequired, double memoryRequired, double storageRequired) {
+    public Task(int id, int taskDAGId, int layerId, double computationRequired, double memoryRequired, double storageRequired) {
         this.id = id;
+        this.taskDAGId = taskDAGId;
 
         this.computationRequired = computationRequired;
         this.memoryRequired = memoryRequired;
@@ -41,8 +43,9 @@ public class Task {
         this.successors = new ArrayList<DataDependency>();
     }
 
-    public Task(int id) {
+    public Task(int id, int taskDAGId) {
         this.id = id;
+        this.taskDAGId = taskDAGId;
 
         this.predecessors = new ArrayList<DataDependency>();
         this.successors = new ArrayList<DataDependency>();
@@ -167,6 +170,14 @@ public class Task {
 
     public void setPriority(double priority) {
         this.priority = priority;
+    }
+
+    public void setTaskDAGId(int taskDAGId) {
+        this.taskDAGId = taskDAGId;
+    }
+
+    public int getTaskDAGId() {
+        return this.taskDAGId;
     }
 
     public static Comparator<Task> compareByPriority = new Comparator<Task>() {
