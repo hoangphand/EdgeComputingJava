@@ -40,7 +40,7 @@ public class TaskDAG {
         int maxNoOfNodesPerLayer = (int) Math.round(Math.sqrt(noOfTasks) * alpha * 2 - minNoOfNodesPerLayer);
 
         for (int i = 0; i < noOfTasks + 2; i++) {
-            this.tasks.add(new Task(i, id));
+            this.tasks.add(new Task(i, this));
 //            this.tasks.add(new Task(i, 0, 0, 0, 0));
         }
 
@@ -128,7 +128,7 @@ public class TaskDAG {
             int noOfTasks = Integer.parseInt(reader.readLine());
             this.tasks = new ArrayList<Task>();
             for (int i = 0; i < noOfTasks + 2; i++) {
-                this.tasks.add(new Task(i, id));
+                this.tasks.add(new Task(i, this));
             }
 
             reader.readLine();
@@ -189,6 +189,8 @@ public class TaskDAG {
     public int getId() {
         return this.id;
     }
+
+    public void setId(int id) { this.id = id; }
 
     public double getDeadline() {
         return this.deadline;

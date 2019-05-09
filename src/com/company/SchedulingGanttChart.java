@@ -8,6 +8,9 @@ import org.jfree.chart.axis.DateAxis;
 import org.jfree.chart.axis.SymbolAxis;
 import org.jfree.chart.plot.PlotOrientation;
 import org.jfree.chart.plot.XYPlot;
+import org.jfree.chart.renderer.category.BarRenderer;
+import org.jfree.chart.renderer.category.StandardBarPainter;
+import org.jfree.chart.renderer.xy.StandardXYBarPainter;
 import org.jfree.chart.renderer.xy.XYBarRenderer;
 import org.jfree.data.gantt.Task;
 import org.jfree.data.gantt.TaskSeries;
@@ -18,17 +21,22 @@ import org.jfree.data.xy.IntervalXYDataset;
 import javax.swing.*;
 import java.awt.*;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 
 public class SchedulingGanttChart {
     public SchedulingGanttChart(JFrame frame, Schedule schedule) {
+        TaskSeriesCollection dataset = this.getCategoryDataset(schedule);
         JFreeChart chart = ChartFactory.createXYBarChart(
                 "Task scheduling for app " + schedule.getTaskDAG().getId(),
-                "Resource", false, "Timing", this.getCategoryDataset(schedule),
+                "Resource", false, "Timing", new XYTaskDataset(dataset),
                 PlotOrientation.HORIZONTAL,
                 true, false, false);
 
         chart.setBackgroundPaint(Color.white);
+
+        ChartUtilities.applyCurrentTheme(chart);
 
         XYPlot plot = (XYPlot) chart.getPlot();
         plot.setRangePannable(true);
@@ -54,15 +62,18 @@ public class SchedulingGanttChart {
         DateAxis range = new DateAxis("Time");
         range.setDateFormatOverride(new SimpleDateFormat("m.ss.SSS"));
         plot.setRangeAxis(range);
-        XYBarRenderer renderer = (XYBarRenderer) plot.getRenderer();
+        MyRenderer renderer = new MyRenderer(dataset);
         renderer.setUseYInterval(true);
-        ChartUtilities.applyCurrentTheme(chart);
+        renderer.setBarPainter(new StandardXYBarPainter());
+        renderer.setShadowVisible(false);
+        plot.setRenderer(renderer);
+//        ((BarRenderer) plot.getRenderer()).setBarPainter(new StandardBarPainter());
 
         ChartPanel panel = new ChartPanel(chart);
         frame.setContentPane(panel);
     }
 
-    private IntervalXYDataset getCategoryDataset(Schedule schedule) {
+    private TaskSeriesCollection getCategoryDataset(Schedule schedule) {
         TaskSeriesCollection dataset = new TaskSeriesCollection();
 
         for (int i = 0; i < schedule.getProcessorCoreExecutionSlots().size(); i++) {
@@ -84,13 +95,46 @@ public class SchedulingGanttChart {
                     long startTime = (new Double(currentSlot.getStartTime() * 1000)).longValue();
                     long endTime = (new Double(currentSlot.getEndTime() * 1000)).longValue();
 
-                    taskSeries.add(new Task("Task " + currentSlot.getTask().getId(), new Date(startTime), new Date(endTime)));
+                    taskSeries.add(new Task(String.valueOf(currentSlot.getTask().getTaskDAGId()),
+                            new Date(startTime), new Date(endTime)));
                 }
             }
 
             dataset.add(taskSeries);
         }
 
-        return new XYTaskDataset(dataset);
+        return dataset;
+    }
+}
+
+class MyRenderer extends XYBarRenderer {
+    private final TaskSeriesCollection model;
+
+    private List<Color> listOfColors = new ArrayList<Color>(List.of(
+            Color.BLACK,
+            Color.BLUE,
+            Color.CYAN,
+//            Color.DARK_GRAY,
+            Color.GREEN,
+            Color.MAGENTA,
+            Color.ORANGE,
+            Color.WHITE,
+            Color.RED,
+            Color.YELLOW,
+            Color.PINK
+    ));
+
+    public MyRenderer(TaskSeriesCollection model) {
+        this.model = model;
+    }
+
+    @Override
+    public Paint getItemPaint(int row, int col) {
+        TaskSeries series = (TaskSeries) model.getRowKeys().get(row);
+        Task task = series.get(col);
+
+        int taskDAGId = Integer.parseInt(task.getDescription());
+
+        return listOfColors.get(taskDAGId % (listOfColors.size()));
     }
 }

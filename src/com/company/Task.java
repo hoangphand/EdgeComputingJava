@@ -21,6 +21,7 @@ public class Task {
 
     private int id;
     private int taskDAGId;
+    private TaskDAG taskDAG;
     private int layerId;
     private double computationRequired;
     private double memoryRequired;
@@ -46,6 +47,14 @@ public class Task {
     public Task(int id, int taskDAGId) {
         this.id = id;
         this.taskDAGId = taskDAGId;
+
+        this.predecessors = new ArrayList<DataDependency>();
+        this.successors = new ArrayList<DataDependency>();
+    }
+
+    public Task(int id, TaskDAG taskDAG) {
+        this.id = id;
+        this.taskDAG = taskDAG;
 
         this.predecessors = new ArrayList<DataDependency>();
         this.successors = new ArrayList<DataDependency>();
@@ -177,7 +186,7 @@ public class Task {
     }
 
     public int getTaskDAGId() {
-        return this.taskDAGId;
+        return this.taskDAG.getId();
     }
 
     public static Comparator<Task> compareByPriority = new Comparator<Task>() {

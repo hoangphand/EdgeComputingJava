@@ -1,7 +1,9 @@
 package com.company;
 
 import java.awt.*;
+import java.lang.reflect.Array;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Date;
 import javax.swing.JFrame;
 import javax.swing.SwingUtilities;
@@ -42,26 +44,31 @@ public class MainGanttMultiple extends JFrame {
         ScheduleResult scheduleResult = new ScheduleResult(schedule);
         scheduleResult.print();
 
+        ArrayList<TaskDAG> listOfTaskDAGs = new ArrayList<TaskDAG>();
+        listOfTaskDAGs.add(taskDAG);
+
         int noOfAcceptedRequests = 1;
 
         for (int id = 2; id < noOfDAGsToTest + 1; id++) {
-            taskDAG = new TaskDAG(id, "dataset-GHz/" + id + ".dag");
+            TaskDAG newTaskDAG = new TaskDAG(id, "dataset-GHz/" + id + ".dag");
 
-            Schedule tmpSchedule = Heuristics.DynamicHEFT(schedule, taskDAG);
+            Schedule tmpSchedule = Heuristics.DynamicHEFT(schedule, newTaskDAG);
 
-            if (tmpSchedule.getActualStartTimeOfDAG() != taskDAG.getArrivalTime()) {
+            if (tmpSchedule.getActualStartTimeOfDAG() != newTaskDAG.getArrivalTime()) {
                 System.out.println("Actual start time: " + tmpSchedule.getActualStartTimeOfDAG());
                 System.out.println("Actual waiting time: " + tmpSchedule.getActualWaitingTime());
             }
 
             ScheduleResult tmpScheduleResult = new ScheduleResult(tmpSchedule);
+            tmpScheduleResult.print();
 
             if (tmpScheduleResult.isAccepted()) {
                 schedule.setProcessorExecutionSlots(tmpSchedule.getProcessorCoreExecutionSlots());
+                newTaskDAG.setId(noOfAcceptedRequests);
                 noOfAcceptedRequests += 1;
             }
 
-            tmpScheduleResult.print();
+            listOfTaskDAGs.add(newTaskDAG);
         }
 
         System.out.println("Accepted " + noOfAcceptedRequests);
