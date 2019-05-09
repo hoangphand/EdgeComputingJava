@@ -4,6 +4,7 @@ public class ScheduleResult {
     private boolean isAccepted;
     private double ast;
     private double aft;
+    private double responseTime;
     private double makespan;
     private int noOfCloudNodesUsed;
     private int noOfFogNodesUsed;
@@ -20,10 +21,11 @@ public class ScheduleResult {
         this.ast = schedule.getAST();
         this.aft = schedule.getAFT();
 //        this.makespan = schedule.getAFT() - schedule.getAST();
-        this.makespan = schedule.getAFT() - schedule.getTaskDAG().getArrivalTime();
+        this.responseTime = schedule.getAFT() - schedule.getTaskDAG().getArrivalTime();
+        this.makespan = schedule.getAFT() - schedule.getActualStartTimeOfDAG();
         this.noOfSlots = schedule.countSlotsInNetwork();
 
-        if (this.makespan <= this.taskDAG.getDeadline()) {
+        if (this.responseTime <= this.taskDAG.getDeadline()) {
             this.isAccepted = true;
             this.earlyTime = this.taskDAG.getDeadline() - this.makespan;
         } else {
@@ -61,9 +63,10 @@ public class ScheduleResult {
             System.out.println(PrintUtils.ANSI_RED_BACKGROUND + "REJECTED!!!" + PrintUtils.ANSI_RESET);
         }
 
-        System.out.println("Makespan: " + this.makespan + ", deadline: " + this.taskDAG.getDeadline());
-        System.out.println("MakespanHEFT: " + this.taskDAG.getMakespanHEFT());
-        System.out.println("Arrives at " + this.taskDAG.getArrivalTime() + ", AST: " + this.ast + ", AFT: " + this.aft);
+        System.out.println("Response time: " + this.responseTime + ", deadline: " + this.taskDAG.getDeadline());
+        System.out.println("Makespan: " + this.makespan + ", MakespanHEFT: " + this.taskDAG.getMakespanHEFT());
+        System.out.println("Arrives at " + this.taskDAG.getArrivalTime() + ", wait time: " + (this.ast - this.taskDAG.getArrivalTime()));
+        System.out.println("AST: " + this.ast + ", AFT: " + this.aft);
         System.out.println("CCR: " + this.taskDAG.getCCR() +
                 ", noOfClouds: " + this.noOfCloudNodesUsed + ", noOfFogs: " + this.noOfFogNodesUsed);
         System.out.println("Cloud cost: " + this.cloudCost);

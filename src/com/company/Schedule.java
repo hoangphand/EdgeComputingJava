@@ -401,6 +401,7 @@ public class Schedule {
     }
 
     public double getActualStartTimeOfDAG() {
+//        return this.taskExecutionSlot.get(1).getStartTime();
         double actualStartTime = Double.MAX_VALUE;
 
         for (int i = 0; i < this.taskDAG.getLayers().get(1).size(); i++) {
@@ -421,7 +422,6 @@ public class Schedule {
 
     public void deepCopy(Schedule schedule) {
         this.aft = schedule.aft;
-        this.ast = schedule.ast;
         this.taskDAG = schedule.taskDAG;
         this.processorCoreExecutionSlots = schedule.processorCoreExecutionSlots;
         this.processorDAG = schedule.processorDAG;

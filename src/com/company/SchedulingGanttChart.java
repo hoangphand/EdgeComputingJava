@@ -135,6 +135,6 @@ class MyRenderer extends XYBarRenderer {
 
         int taskDAGId = Integer.parseInt(task.getDescription());
 
-        return listOfColors.get(taskDAGId % (listOfColors.size()));
+        return listOfColors.get(taskDAGId % listOfColors.size());
     }
 }

@@ -5,6 +5,8 @@ import java.util.LinkedList;
 import java.util.concurrent.ScheduledExecutorService;
 
 public class Heuristics {
+    private static double BETA = 0.5;
+
     public static Schedule HEFT(TaskDAG taskDAG, ProcessorDAG processorDAG) {
         Schedule schedule = new Schedule(taskDAG, processorDAG);
 //        prioritize tasks
@@ -585,7 +587,6 @@ public class Heuristics {
 
     public static Schedule CompromiseMKCR(TaskDAG taskDAG, ProcessorDAG processorDAG) {
         Schedule schedule = new Schedule(taskDAG, processorDAG);
-        double beta = 0.5;
 //        prioritize tasks
 //        init list of unscheduled tasks
         LinkedList<Task> unscheduledTasks = Heuristics.prioritizeTasks(taskDAG, processorDAG);
@@ -604,6 +605,7 @@ public class Heuristics {
             Slot selectedSlot = null;
             ProcessorCore selectedProcessorCore = null;
             double maxMKCR = Double.MIN_VALUE;
+            double minMKCR = Double.MAX_VALUE;
 
             ArrayList<Double> listOfCloudCost = new ArrayList<Double>();
             ArrayList<Double> listOfTaskEF = new ArrayList<Double>();
@@ -627,11 +629,17 @@ public class Heuristics {
             }
 
             double minCloudCost = Double.MAX_VALUE;
+            double maxCloudCost = Double.MIN_VALUE;
             double minTaskEF = Double.MAX_VALUE;
+            double maxTaskEF = Double.MIN_VALUE;
 
             for (int i = 0; i < listOfCloudCost.size(); i++) {
                 if (listOfCloudCost.get(i) < minCloudCost) {
                     minCloudCost = listOfCloudCost.get(i);
+                }
+
+                if (listOfCloudCost.get(i) > maxCloudCost) {
+                    maxCloudCost = listOfCloudCost.get(i);
                 }
             }
 
@@ -639,28 +647,60 @@ public class Heuristics {
                 if (listOfTaskEF.get(i) < minTaskEF) {
                     minTaskEF = listOfTaskEF.get(i);
                 }
+
+                if (listOfCloudCost.get(i) > maxTaskEF) {
+                    maxTaskEF = listOfTaskEF.get(i);
+                }
             }
 
             for (int i = 0; i < listOfCloudCost.size(); i++) {
-                double tmpMKCR = (1 - beta) * minCloudCost / listOfCloudCost.get(i) + beta * minTaskEF / listOfTaskEF.get(i);
+                double tmpMKCR;
+
+//                if (currentTask.getId() == taskDAG.getTasks().size() - 1) {
+//                    tmpMKCR = BETA * minTaskEF / listOfTaskEF.get(i);
+//                } else {
+//                    if (listOfTmpSlots.get(i).getProcessor().isFog()) {
+//                        tmpMKCR = (1 - BETA) * 1 + BETA * minTaskEF / listOfTaskEF.get(i);
+//                    } else {
+//                        tmpMKCR = (1 - BETA) * minCloudCost / listOfCloudCost.get(i) + BETA * minTaskEF / listOfTaskEF.get(i);
+//                    }
+//                }
+//                System.out.println(listOfTaskEF.get(i));
 
                 if (currentTask.getId() == taskDAG.getTasks().size() - 1) {
-                    tmpMKCR = beta * minTaskEF / listOfTaskEF.get(i);
+                    tmpMKCR = listOfTaskEF.get(i);
+//                    System.out.println(listOfTaskEF.get(i));
+//                    System.out.println(maxTaskEF);
+//                    System.out.println(tmpMKCR);
                 } else {
-                    tmpMKCR = (1 - beta) * minCloudCost / listOfCloudCost.get(i) + beta * minTaskEF / listOfTaskEF.get(i);
+                    tmpMKCR = (1 - BETA) * listOfCloudCost.get(i) / maxCloudCost + BETA * listOfTaskEF.get(i) / maxTaskEF;
                 }
 
-                if (tmpMKCR > maxMKCR) {
-                    maxMKCR = tmpMKCR;
+                if (tmpMKCR < minMKCR) {
+                    minMKCR = tmpMKCR;
                     selectedSlot = listOfTmpSlots.get(i);
                     selectedProcessorCore = listOfTmpSlots.get(i).getProcessorCore();
                 }
+
+//                if (currentTask.getId() == taskDAG.getTasks().size() - 1) {
+//                    tmpMKCR = minTaskEF / listOfTaskEF.get(i);
+//                } else {
+//                    if (listOfTmpSlots.get(i).getProcessor().isFog()) {
+//                        tmpMKCR = minTaskEF / listOfTaskEF.get(i);
+//                    } else {
+//                        tmpMKCR = minCloudCost / listOfCloudCost.get(i) * minTaskEF / listOfTaskEF.get(i);
+//                    }
+//                }
+
+//                if (tmpMKCR > maxMKCR) {
+//                    maxMKCR = tmpMKCR;
+//                    selectedSlot = listOfTmpSlots.get(i);
+//                    selectedProcessorCore = listOfTmpSlots.get(i).getProcessorCore();
+//                }
             }
 
-            if (selectedProcessorCore == null) {
-                System.out.println("null");
-                System.out.println(maxMKCR);
-            }
+            System.out.println(currentTask.getId() + " MinMKCR: " + minMKCR);
+//            System.out.println("MaxMKCR: " + maxMKCR);
 
             schedule.addNewSlot(selectedProcessorCore, currentTask, selectedSlot.getStartTime());
         }
@@ -670,18 +710,19 @@ public class Heuristics {
         return schedule;
     }
 
-    public static Schedule DynamicCompromiseMKCR(TaskDAG taskDAG, ProcessorDAG processorDAG) {
-        Schedule schedule = new Schedule(taskDAG, processorDAG);
-        double beta = 0.5;
+    public static Schedule DynamicCompromiseMKCR(Schedule schedule, TaskDAG taskDAG) {
+        Schedule tmpSchedule = new Schedule(schedule, taskDAG);
 //        prioritize tasks
 //        init list of unscheduled tasks
-        LinkedList<Task> unscheduledTasks = Heuristics.prioritizeTasks(taskDAG, processorDAG);
+        LinkedList<Task> unscheduledTasks = Heuristics.prioritizeTasks(taskDAG, tmpSchedule.getProcessorDAG());
 //        get the entry task by popping the first task from the unscheduled list
         Task entryTask = unscheduledTasks.removeLast();
 //        get the most powerful processor in the network
 //        Processor mostPowerfulProcessor = processorDAG.getTheMostPowerfulProcessor();
 //        allocate dummy entry task on the most powerful processing node at timestamp 0
-        schedule.addNewSlot(schedule.getFirstProcessorCoreFreeAt(0), entryTask, 0);
+        ProcessorCore selectedProcessorCoreForEntryTask = schedule.getFirstProcessorCoreFreeAt(taskDAG.getArrivalTime());
+
+        tmpSchedule.addNewSlot(selectedProcessorCoreForEntryTask, entryTask, taskDAG.getArrivalTime());
 
 //        loop through all unscheduled tasks
         while (unscheduledTasks.size() > 0) {
@@ -691,16 +732,17 @@ public class Heuristics {
             Slot selectedSlot = null;
             ProcessorCore selectedProcessorCore = null;
             double maxMKCR = Double.MIN_VALUE;
+            double minMKCR = Double.MAX_VALUE;
 
             ArrayList<Double> listOfCloudCost = new ArrayList<Double>();
             ArrayList<Double> listOfTaskEF = new ArrayList<Double>();
             ArrayList<Slot> listOfTmpSlots = new ArrayList<Slot>();
 
 //            loop through all processors to find the best processing execution location
-            for (int i = 0; i < schedule.getProcessorCoreExecutionSlots().size(); i++) {
-                ProcessorCore currentProcessorCore = schedule.getProcessorCoreExecutionSlots().get(i).get(0).getProcessorCore();
+            for (int i = 0; i < tmpSchedule.getProcessorCoreExecutionSlots().size(); i++) {
+                ProcessorCore currentProcessorCore = tmpSchedule.getProcessorCoreExecutionSlots().get(i).get(0).getProcessorCore();
 //                find the first-fit slot on the current processor for the current task
-                Slot currentSelectedSlot = schedule.getFirstFitSlotForTaskOnProcessorCore(currentProcessorCore, currentTask);
+                Slot currentSelectedSlot = tmpSchedule.getFirstFitSlotForTaskOnProcessorCore(currentProcessorCore, currentTask);
                 double cloudCost = 0;
                 double taskMakespan = currentSelectedSlot.getEndTime() - currentSelectedSlot.getStartTime();
 
@@ -714,11 +756,17 @@ public class Heuristics {
             }
 
             double minCloudCost = Double.MAX_VALUE;
+            double maxCloudCost = Double.MIN_VALUE;
             double minTaskEF = Double.MAX_VALUE;
+            double maxTaskEF = Double.MIN_VALUE;
 
             for (int i = 0; i < listOfCloudCost.size(); i++) {
                 if (listOfCloudCost.get(i) < minCloudCost) {
                     minCloudCost = listOfCloudCost.get(i);
+                }
+
+                if (listOfCloudCost.get(i) > maxCloudCost) {
+                    maxCloudCost = listOfCloudCost.get(i);
                 }
             }
 
@@ -726,35 +774,48 @@ public class Heuristics {
                 if (listOfTaskEF.get(i) < minTaskEF) {
                     minTaskEF = listOfTaskEF.get(i);
                 }
+
+                if (listOfCloudCost.get(i) > maxTaskEF) {
+                    maxTaskEF = listOfTaskEF.get(i);
+                }
             }
 
             for (int i = 0; i < listOfCloudCost.size(); i++) {
-                double tmpMKCR = (1 - beta) * minCloudCost / listOfCloudCost.get(i) + beta * minTaskEF / listOfTaskEF.get(i);
-
+                double tmpMKCR;
+//                if (currentTask.getId() == taskDAG.getTasks().size() - 1) {
+//                    tmpMKCR = BETA * minTaskEF / listOfTaskEF.get(i);
+//                } else {
+//                    if (listOfTmpSlots.get(i).getProcessor().isFog()) {
+//                        tmpMKCR = (1 - BETA) * 1 + BETA * minTaskEF / listOfTaskEF.get(i);
+//                    } else {
+//                        tmpMKCR = (1 - BETA) * minCloudCost / listOfCloudCost.get(i) + BETA * minTaskEF / listOfTaskEF.get(i);
+//                    }
+//                }
+//
+//                if (tmpMKCR > maxMKCR) {
+//                    maxMKCR = tmpMKCR;
+//                    selectedSlot = listOfTmpSlots.get(i);
+//                    selectedProcessorCore = listOfTmpSlots.get(i).getProcessorCore();
+//                }
                 if (currentTask.getId() == taskDAG.getTasks().size() - 1) {
-                    tmpMKCR = beta * minTaskEF / listOfTaskEF.get(i);
+                    tmpMKCR = listOfTaskEF.get(i);
                 } else {
-                    tmpMKCR = (1 - beta) * minCloudCost / listOfCloudCost.get(i) + beta * minTaskEF / listOfTaskEF.get(i);
+                    tmpMKCR = (1 - BETA) * listOfCloudCost.get(i) / maxCloudCost + BETA * listOfTaskEF.get(i) / maxTaskEF;
                 }
 
-                if (tmpMKCR > maxMKCR) {
-                    maxMKCR = tmpMKCR;
+                if (tmpMKCR < minMKCR) {
+                    minMKCR = tmpMKCR;
                     selectedSlot = listOfTmpSlots.get(i);
                     selectedProcessorCore = listOfTmpSlots.get(i).getProcessorCore();
                 }
             }
 
-            if (selectedProcessorCore == null) {
-                System.out.println("null");
-                System.out.println(maxMKCR);
-            }
-
-            schedule.addNewSlot(selectedProcessorCore, currentTask, selectedSlot.getStartTime());
+            tmpSchedule.addNewSlot(selectedProcessorCore, currentTask, selectedSlot.getStartTime());
         }
 
-        schedule.setAFT(schedule.getTaskExecutionSlot().get(taskDAG.getTasks().size() - 1).getEndTime());
+        tmpSchedule.setAFT(tmpSchedule.getTaskExecutionSlot().get(taskDAG.getTasks().size() - 1).getEndTime());
 
-        return schedule;
+        return tmpSchedule;
     }
 
     public static LinkedList<Task> prioritizeTasks(TaskDAG taskDAG, ProcessorDAG processorDAG) {
