@@ -15,7 +15,7 @@ public class MainGanttSingleASFHEFT extends JFrame {
         ProcessorDAG processorDAG = new ProcessorDAG("dataset-GHz/processors.dag");
 
         TaskDAG taskDAG = new TaskDAG(1, "dataset-GHz/1.dag");
-        Schedule schedule = Heuristics.AStepFurtherHEFTAdjacent(taskDAG, processorDAG);
+        Schedule schedule = Heuristics.AStepFurtherHEFTAdjacentAvg(taskDAG, processorDAG);
         double makespan = schedule.getAFT();
 
         ScheduleResult scheduleResult = new ScheduleResult(schedule);

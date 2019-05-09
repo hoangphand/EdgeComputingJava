@@ -28,7 +28,7 @@ public class MainAnalyzeSingleASFCU {
             TaskDAG taskDAG = new TaskDAG(i, "dataset-GHz/" + i + ".dag");
 
             Schedule scheduleCU = Heuristics.CloudUnaware(taskDAG, processorDAG);
-            Schedule scheduleASF = Heuristics.AStepFurtherHEFTAdjacent(taskDAG, processorDAG);
+            Schedule scheduleASF = Heuristics.AStepFurtherHEFTAdjacentAvg(taskDAG, processorDAG);
 //            Schedule scheduleASF = Heuristics.AStepFurtherHEFT(taskDAG, processorDAG);
 
             if (scheduleCU.getAFT() > scheduleASF.getAFT()) {

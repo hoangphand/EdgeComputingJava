@@ -28,7 +28,8 @@ public class MainAnalyzeSingleASFHEFT {
             TaskDAG taskDAG = new TaskDAG(i, "dataset-GHz/" + i + ".dag");
 
 //            Schedule schedule = Heuristics.AStepFurtherHEFT(taskDAG, processorDAG);
-            Schedule schedule = Heuristics.AStepFurtherHEFTAdjacent(taskDAG, processorDAG);
+//            Schedule schedule = Heuristics.AStepFurtherHEFTAdjacentAvg(taskDAG, processorDAG);
+            Schedule schedule = Heuristics.AStepFurtherHEFTAdjacentMax(taskDAG, processorDAG);
 
             if (schedule.getAFT() < taskDAG.getMakespanHEFT()) {
                 noOfCUBetterThanHEFT += 1;
