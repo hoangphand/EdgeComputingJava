@@ -20,7 +20,6 @@ public class Heuristics {
 //        loop through all unscheduled tasks
         while (unscheduledTasks.size() > 0) {
             Task currentTask = taskDAG.getTasks().get(unscheduledTasks.removeLast().getId());
-            System.out.println("Current task: " + currentTask.getId());
 
 //            calculate ready time to calculate current task on all the processors in the network
             Slot selectedSlot = null;
@@ -31,8 +30,6 @@ public class Heuristics {
                 ProcessorCore currentProcessorCore = schedule.getProcessorCoreExecutionSlots().get(i).get(0).getProcessorCore();
 //                find the first-fit slot on the current processor for the current task
                 Slot currentSelectedSlot = schedule.getFirstFitSlotForTaskOnProcessorCore(currentProcessorCore, currentTask);
-                System.out.println("Current processor " + currentProcessorCore.getProcessor().getId() +
-                        " current core " + currentProcessorCore.getCoreId() + " ends at " + currentSelectedSlot.getEndTime());
 
                 if (selectedSlot == null || currentSelectedSlot.getEndTime() < selectedSlot.getEndTime()) {
                     selectedSlot = currentSelectedSlot;
@@ -40,9 +37,6 @@ public class Heuristics {
                 }
             }
 
-            System.out.println("Select processor " + selectedProcessorCore.getProcessor().getId() +
-                    " core " + selectedProcessorCore.getCoreId() + " ends at " + selectedSlot.getEndTime());
-            System.out.println("============================================");
             schedule.addNewSlot(selectedProcessorCore, currentTask, selectedSlot.getStartTime());
         }
 
@@ -587,6 +581,180 @@ public class Heuristics {
         tmpSchedule.setAST(tmpSchedule.getActualStartTimeOfDAG());
 
         return tmpSchedule;
+    }
+
+    public static Schedule CompromiseMKCR(TaskDAG taskDAG, ProcessorDAG processorDAG) {
+        Schedule schedule = new Schedule(taskDAG, processorDAG);
+        double beta = 0.5;
+//        prioritize tasks
+//        init list of unscheduled tasks
+        LinkedList<Task> unscheduledTasks = Heuristics.prioritizeTasks(taskDAG, processorDAG);
+//        get the entry task by popping the first task from the unscheduled list
+        Task entryTask = unscheduledTasks.removeLast();
+//        get the most powerful processor in the network
+//        Processor mostPowerfulProcessor = processorDAG.getTheMostPowerfulProcessor();
+//        allocate dummy entry task on the most powerful processing node at timestamp 0
+        schedule.addNewSlot(schedule.getFirstProcessorCoreFreeAt(0), entryTask, 0);
+
+//        loop through all unscheduled tasks
+        while (unscheduledTasks.size() > 0) {
+            Task currentTask = taskDAG.getTasks().get(unscheduledTasks.removeLast().getId());
+
+//            calculate ready time to calculate current task on all the processors in the network
+            Slot selectedSlot = null;
+            ProcessorCore selectedProcessorCore = null;
+            double maxMKCR = Double.MIN_VALUE;
+
+            ArrayList<Double> listOfCloudCost = new ArrayList<Double>();
+            ArrayList<Double> listOfTaskEF = new ArrayList<Double>();
+            ArrayList<Slot> listOfTmpSlots = new ArrayList<Slot>();
+
+//            loop through all processors to find the best processing execution location
+            for (int i = 0; i < schedule.getProcessorCoreExecutionSlots().size(); i++) {
+                ProcessorCore currentProcessorCore = schedule.getProcessorCoreExecutionSlots().get(i).get(0).getProcessorCore();
+//                find the first-fit slot on the current processor for the current task
+                Slot currentSelectedSlot = schedule.getFirstFitSlotForTaskOnProcessorCore(currentProcessorCore, currentTask);
+                double cloudCost = 0;
+                double taskMakespan = currentSelectedSlot.getEndTime() - currentSelectedSlot.getStartTime();
+
+                if (!currentProcessorCore.getProcessor().isFog()) {
+                    cloudCost = taskMakespan * currentProcessorCore.getProcessor().getCostPerTimeUnit();
+                }
+
+                listOfCloudCost.add(cloudCost);
+                listOfTaskEF.add(currentSelectedSlot.getEndTime());
+                listOfTmpSlots.add(currentSelectedSlot);
+            }
+
+            double minCloudCost = Double.MAX_VALUE;
+            double minTaskEF = Double.MAX_VALUE;
+
+            for (int i = 0; i < listOfCloudCost.size(); i++) {
+                if (listOfCloudCost.get(i) < minCloudCost) {
+                    minCloudCost = listOfCloudCost.get(i);
+                }
+            }
+
+            for (int i = 0; i < listOfTaskEF.size(); i++) {
+                if (listOfTaskEF.get(i) < minTaskEF) {
+                    minTaskEF = listOfTaskEF.get(i);
+                }
+            }
+
+            for (int i = 0; i < listOfCloudCost.size(); i++) {
+                double tmpMKCR = (1 - beta) * minCloudCost / listOfCloudCost.get(i) + beta * minTaskEF / listOfTaskEF.get(i);
+
+                if (currentTask.getId() == taskDAG.getTasks().size() - 1) {
+                    tmpMKCR = beta * minTaskEF / listOfTaskEF.get(i);
+                } else {
+                    tmpMKCR = (1 - beta) * minCloudCost / listOfCloudCost.get(i) + beta * minTaskEF / listOfTaskEF.get(i);
+                }
+
+                if (tmpMKCR > maxMKCR) {
+                    maxMKCR = tmpMKCR;
+                    selectedSlot = listOfTmpSlots.get(i);
+                    selectedProcessorCore = listOfTmpSlots.get(i).getProcessorCore();
+                }
+            }
+
+            if (selectedProcessorCore == null) {
+                System.out.println("null");
+                System.out.println(maxMKCR);
+            }
+
+            schedule.addNewSlot(selectedProcessorCore, currentTask, selectedSlot.getStartTime());
+        }
+
+        schedule.setAFT(schedule.getTaskExecutionSlot().get(taskDAG.getTasks().size() - 1).getEndTime());
+
+        return schedule;
+    }
+
+    public static Schedule DynamicCompromiseMKCR(TaskDAG taskDAG, ProcessorDAG processorDAG) {
+        Schedule schedule = new Schedule(taskDAG, processorDAG);
+        double beta = 0.5;
+//        prioritize tasks
+//        init list of unscheduled tasks
+        LinkedList<Task> unscheduledTasks = Heuristics.prioritizeTasks(taskDAG, processorDAG);
+//        get the entry task by popping the first task from the unscheduled list
+        Task entryTask = unscheduledTasks.removeLast();
+//        get the most powerful processor in the network
+//        Processor mostPowerfulProcessor = processorDAG.getTheMostPowerfulProcessor();
+//        allocate dummy entry task on the most powerful processing node at timestamp 0
+        schedule.addNewSlot(schedule.getFirstProcessorCoreFreeAt(0), entryTask, 0);
+
+//        loop through all unscheduled tasks
+        while (unscheduledTasks.size() > 0) {
+            Task currentTask = taskDAG.getTasks().get(unscheduledTasks.removeLast().getId());
+
+//            calculate ready time to calculate current task on all the processors in the network
+            Slot selectedSlot = null;
+            ProcessorCore selectedProcessorCore = null;
+            double maxMKCR = Double.MIN_VALUE;
+
+            ArrayList<Double> listOfCloudCost = new ArrayList<Double>();
+            ArrayList<Double> listOfTaskEF = new ArrayList<Double>();
+            ArrayList<Slot> listOfTmpSlots = new ArrayList<Slot>();
+
+//            loop through all processors to find the best processing execution location
+            for (int i = 0; i < schedule.getProcessorCoreExecutionSlots().size(); i++) {
+                ProcessorCore currentProcessorCore = schedule.getProcessorCoreExecutionSlots().get(i).get(0).getProcessorCore();
+//                find the first-fit slot on the current processor for the current task
+                Slot currentSelectedSlot = schedule.getFirstFitSlotForTaskOnProcessorCore(currentProcessorCore, currentTask);
+                double cloudCost = 0;
+                double taskMakespan = currentSelectedSlot.getEndTime() - currentSelectedSlot.getStartTime();
+
+                if (!currentProcessorCore.getProcessor().isFog()) {
+                    cloudCost = taskMakespan * currentProcessorCore.getProcessor().getCostPerTimeUnit();
+                }
+
+                listOfCloudCost.add(cloudCost);
+                listOfTaskEF.add(currentSelectedSlot.getEndTime());
+                listOfTmpSlots.add(currentSelectedSlot);
+            }
+
+            double minCloudCost = Double.MAX_VALUE;
+            double minTaskEF = Double.MAX_VALUE;
+
+            for (int i = 0; i < listOfCloudCost.size(); i++) {
+                if (listOfCloudCost.get(i) < minCloudCost) {
+                    minCloudCost = listOfCloudCost.get(i);
+                }
+            }
+
+            for (int i = 0; i < listOfTaskEF.size(); i++) {
+                if (listOfTaskEF.get(i) < minTaskEF) {
+                    minTaskEF = listOfTaskEF.get(i);
+                }
+            }
+
+            for (int i = 0; i < listOfCloudCost.size(); i++) {
+                double tmpMKCR = (1 - beta) * minCloudCost / listOfCloudCost.get(i) + beta * minTaskEF / listOfTaskEF.get(i);
+
+                if (currentTask.getId() == taskDAG.getTasks().size() - 1) {
+                    tmpMKCR = beta * minTaskEF / listOfTaskEF.get(i);
+                } else {
+                    tmpMKCR = (1 - beta) * minCloudCost / listOfCloudCost.get(i) + beta * minTaskEF / listOfTaskEF.get(i);
+                }
+
+                if (tmpMKCR > maxMKCR) {
+                    maxMKCR = tmpMKCR;
+                    selectedSlot = listOfTmpSlots.get(i);
+                    selectedProcessorCore = listOfTmpSlots.get(i).getProcessorCore();
+                }
+            }
+
+            if (selectedProcessorCore == null) {
+                System.out.println("null");
+                System.out.println(maxMKCR);
+            }
+
+            schedule.addNewSlot(selectedProcessorCore, currentTask, selectedSlot.getStartTime());
+        }
+
+        schedule.setAFT(schedule.getTaskExecutionSlot().get(taskDAG.getTasks().size() - 1).getEndTime());
+
+        return schedule;
     }
 
     public static LinkedList<Task> prioritizeTasks(TaskDAG taskDAG, ProcessorDAG processorDAG) {

@@ -12,6 +12,7 @@ public class ScheduleResult {
     private double lateTime;
     private double percentageEarly;
     private double percentageLate;
+    private double cloudCost;
     private TaskDAG taskDAG;
 
     public ScheduleResult(Schedule schedule) {
@@ -32,6 +33,24 @@ public class ScheduleResult {
 
         this.noOfFogNodesUsed = schedule.getNoOfTasksAllocatedToFogNodes();
         this.noOfCloudNodesUsed = schedule.getNoOfTasksAllocatedToCloudNodes();
+
+        this.cloudCost = 0;
+
+        for (int i = 0; i < schedule.getProcessorCoreExecutionSlots().size(); i++) {
+            Processor currentProcessor = schedule.getProcessorCoreExecutionSlots().get(i).get(0).getProcessor();
+
+            if (!currentProcessor.isFog()) {
+                for (int j = 0; j < schedule.getProcessorCoreExecutionSlots().get(i).size(); j++) {
+                    Slot currentSlot = schedule.getProcessorCoreExecutionSlots().get(i).get(j);
+
+                    if (currentSlot.getTask() != null) {
+                        double occupancyPeriod = currentSlot.getEndTime() - currentSlot.getStartTime();
+
+                        this.cloudCost += occupancyPeriod * currentProcessor.getCostPerTimeUnit();
+                    }
+                }
+            }
+        }
     }
 
     public void print() {
@@ -47,9 +66,10 @@ public class ScheduleResult {
         System.out.println("Arrives at " + this.taskDAG.getArrivalTime() + ", AST: " + this.ast + ", AFT: " + this.aft);
         System.out.println("CCR: " + this.taskDAG.getCCR() +
                 ", noOfClouds: " + this.noOfCloudNodesUsed + ", noOfFogs: " + this.noOfFogNodesUsed);
-        if (this.isAccepted) {
-            System.out.println("No of slots: " + this.noOfSlots);
-        }
+        System.out.println("Cloud cost: " + this.cloudCost);
+//        if (this.isAccepted) {
+//            System.out.println("No of slots: " + this.noOfSlots);
+//        }
         System.out.println("=========================================================");
     }
 
