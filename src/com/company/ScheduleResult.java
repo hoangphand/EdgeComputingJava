@@ -55,6 +55,14 @@ public class ScheduleResult {
         }
     }
 
+    public double getMakespan() {
+        return this.makespan;
+    }
+
+    public double getCloudCost() {
+        return (double)Math.round(this.cloudCost * 100d) / 100d;
+    }
+
     public void print() {
         System.out.println("App id " + this.taskDAG.getId());
         if (isAccepted) {

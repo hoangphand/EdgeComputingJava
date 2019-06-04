@@ -26,15 +26,16 @@ import java.util.Date;
 import java.util.List;
 
 public class SchedulingGanttChart {
-    public SchedulingGanttChart(JFrame frame, Schedule schedule) {
+    public SchedulingGanttChart(JFrame frame, String chartLabel, Schedule schedule) {
         TaskSeriesCollection dataset = this.getCategoryDataset(schedule);
         JFreeChart chart = ChartFactory.createXYBarChart(
-                "Task scheduling for app " + schedule.getTaskDAG().getId(),
+                chartLabel,
                 "Resource", false, "Timing", new XYTaskDataset(dataset),
                 PlotOrientation.HORIZONTAL,
                 true, false, false);
 
         chart.setBackgroundPaint(Color.white);
+        chart.removeLegend();
 
         ChartUtilities.applyCurrentTheme(chart);
 

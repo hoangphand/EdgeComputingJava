@@ -1,33 +1,13 @@
 package com.company;
 
-import java.awt.*;
-import java.lang.reflect.Array;
-import java.text.SimpleDateFormat;
+import javax.swing.*;
 import java.util.ArrayList;
-import java.util.Date;
-import javax.swing.JFrame;
-import javax.swing.SwingUtilities;
-import javax.swing.WindowConstants;
-import org.jfree.chart.ChartFactory;
-import org.jfree.chart.ChartPanel;
-import org.jfree.chart.ChartUtilities;
-import org.jfree.chart.JFreeChart;
-import org.jfree.chart.axis.DateAxis;
-import org.jfree.chart.axis.SymbolAxis;
-import org.jfree.chart.plot.PlotOrientation;
-import org.jfree.chart.plot.XYPlot;
-import org.jfree.chart.renderer.xy.XYBarRenderer;
-import org.jfree.data.gantt.Task;
-import org.jfree.data.gantt.TaskSeries;
-import org.jfree.data.gantt.TaskSeriesCollection;
-import org.jfree.data.gantt.XYTaskDataset;
-import org.jfree.data.xy.IntervalXYDataset;
 
-public class MainGanttMultiple extends JFrame {
+public class MainProactiveCUHEFT extends JFrame {
 
     private static final long serialVersionUID = 1L;
 
-    public MainGanttMultiple(String title, String chartLabel, Schedule schedule) {
+    public MainProactiveCUHEFT(String title, String chartLabel, Schedule schedule) {
         super(title);
         SchedulingGanttChart ganttChart = new SchedulingGanttChart(this, chartLabel, schedule);
     }
@@ -38,7 +18,7 @@ public class MainGanttMultiple extends JFrame {
         ProcessorDAG processorDAG = new ProcessorDAG("dataset-GHz/processors.dag");
 
         TaskDAG taskDAG = new TaskDAG(1, "dataset-GHz/1.dag");
-        Schedule schedule = Heuristics.HEFT(taskDAG, processorDAG);
+        Schedule schedule = Heuristics.CompromiseMKCR(taskDAG, processorDAG);
         double makespan = schedule.getAFT();
 
         ScheduleResult scheduleResult = new ScheduleResult(schedule);
@@ -52,22 +32,32 @@ public class MainGanttMultiple extends JFrame {
         for (int id = 2; id < noOfDAGsToTest + 1; id++) {
             TaskDAG newTaskDAG = new TaskDAG(id, "dataset-GHz/" + id + ".dag");
 
-            Schedule tmpSchedule = Heuristics.DynamicHEFT(schedule, newTaskDAG);
-
-            if (tmpSchedule.getActualStartTimeOfDAG() != newTaskDAG.getArrivalTime()) {
-                System.out.println("Actual start time: " + tmpSchedule.getActualStartTimeOfDAG());
-                System.out.println("Actual waiting time: " + tmpSchedule.getActualWaitingTime());
-            }
+            Schedule tmpSchedule = Heuristics.DynamicCloudUnaware(schedule, newTaskDAG);
+            tmpSchedule.setAST(tmpSchedule.getActualStartTimeOfDAG());
 
             ScheduleResult tmpScheduleResult = new ScheduleResult(tmpSchedule);
             tmpScheduleResult.print();
 
             if (tmpScheduleResult.isAccepted()) {
                 schedule.setProcessorExecutionSlots(tmpSchedule.getProcessorCoreExecutionSlots());
-                newTaskDAG.setId(noOfAcceptedRequests);
                 noOfAcceptedRequests += 1;
+                newTaskDAG.setId(noOfAcceptedRequests);
 
                 scheduleResult = tmpScheduleResult;
+            } else {
+                System.out.println("-------Try with HEFT--------------");
+                tmpSchedule = Heuristics.DynamicHEFT(schedule, newTaskDAG);
+                tmpSchedule.setAST(tmpSchedule.getActualStartTimeOfDAG());
+                tmpScheduleResult = new ScheduleResult(tmpSchedule);
+                tmpScheduleResult.print();
+
+                if (tmpScheduleResult.isAccepted()) {
+                    schedule.setProcessorExecutionSlots(tmpSchedule.getProcessorCoreExecutionSlots());
+                    noOfAcceptedRequests += 1;
+                    newTaskDAG.setId(noOfAcceptedRequests);
+
+                    scheduleResult = tmpScheduleResult;
+                }
             }
 
             listOfTaskDAGs.add(newTaskDAG);
@@ -79,9 +69,9 @@ public class MainGanttMultiple extends JFrame {
         final double cloudCost = scheduleResult.getCloudCost();
 
         SwingUtilities.invokeLater(() -> {
-            MainGanttMultiple example = new MainGanttMultiple(
-                    "HEFT",
-                    "HEFT (Accepted: " + GR + ", Cloud cost: " + cloudCost + ")",
+            MainProactiveCUHEFT example = new MainProactiveCUHEFT(
+                    "ProactiveCUHEFT",
+                    "ProactiveCUHEFT (Accepted: " + GR + ", Cloud cost: " + cloudCost + ")",
                     schedule);
             example.setSize(800, 400);
             example.setLocationRelativeTo(null);
@@ -89,4 +79,4 @@ public class MainGanttMultiple extends JFrame {
             example.setVisible(true);
         });
     }
-}  
+}

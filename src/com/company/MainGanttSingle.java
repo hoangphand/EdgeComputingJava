@@ -25,9 +25,9 @@ public class MainGanttSingle extends JFrame {
 
     private static final long serialVersionUID = 1L;
 
-    public MainGanttSingle(String title, Schedule schedule) {
+    public MainGanttSingle(String title, String chartLabel, Schedule schedule) {
         super(title);
-        SchedulingGanttChart ganttChart = new SchedulingGanttChart(this, schedule);
+        SchedulingGanttChart ganttChart = new SchedulingGanttChart(this, chartLabel, schedule);
     }
 
     public static void main(String[] args) {
@@ -39,9 +39,13 @@ public class MainGanttSingle extends JFrame {
 
         ScheduleResult scheduleResult = new ScheduleResult(schedule);
         scheduleResult.print();
+        final double cloudCost = scheduleResult.getCloudCost();
 
         SwingUtilities.invokeLater(() -> {
-            MainGanttSingle example = new MainGanttSingle("Gantt Chart", schedule);
+            MainGanttSingle example = new MainGanttSingle(
+                    "HEFT",
+                    "HEFT (Cloud cost: " + cloudCost + ")",
+                    schedule);
             example.setSize(1200, 700);
             example.setLocationRelativeTo(null);
             example.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);

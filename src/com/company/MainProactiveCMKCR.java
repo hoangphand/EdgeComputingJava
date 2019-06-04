@@ -3,11 +3,11 @@ package com.company;
 import javax.swing.*;
 import java.util.ArrayList;
 
-public class MainGanttMultipleCompromiseMKCR extends JFrame {
+public class MainProactiveCMKCR extends JFrame {
 
     private static final long serialVersionUID = 1L;
 
-    public MainGanttMultipleCompromiseMKCR(String title, String chartLabel, Schedule schedule) {
+    public MainProactiveCMKCR(String title, String chartLabel, Schedule schedule) {
         super(title);
         SchedulingGanttChart ganttChart = new SchedulingGanttChart(this, chartLabel, schedule);
     }
@@ -44,6 +44,34 @@ public class MainGanttMultipleCompromiseMKCR extends JFrame {
                 newTaskDAG.setId(noOfAcceptedRequests);
 
                 scheduleResult = tmpScheduleResult;
+            } else {
+                System.out.println("-------Try with lower beta--------------");
+                tmpSchedule = Heuristics.DynamicCompromiseMKCR(schedule, newTaskDAG, 0.2);
+                tmpSchedule.setAST(tmpSchedule.getActualStartTimeOfDAG());
+                tmpScheduleResult = new ScheduleResult(tmpSchedule);
+                tmpScheduleResult.print();
+
+                if (tmpScheduleResult.isAccepted()) {
+                    schedule.setProcessorExecutionSlots(tmpSchedule.getProcessorCoreExecutionSlots());
+                    noOfAcceptedRequests += 1;
+                    newTaskDAG.setId(noOfAcceptedRequests);
+
+                    scheduleResult = tmpScheduleResult;
+                } else {
+                    System.out.println("-------Try with HEFT--------------");
+                    tmpSchedule = Heuristics.DynamicHEFT(schedule, newTaskDAG);
+                    tmpSchedule.setAST(tmpSchedule.getActualStartTimeOfDAG());
+                    tmpScheduleResult = new ScheduleResult(tmpSchedule);
+                    tmpScheduleResult.print();
+
+                    if (tmpScheduleResult.isAccepted()) {
+                        schedule.setProcessorExecutionSlots(tmpSchedule.getProcessorCoreExecutionSlots());
+                        noOfAcceptedRequests += 1;
+                        newTaskDAG.setId(noOfAcceptedRequests);
+
+                        scheduleResult = tmpScheduleResult;
+                    }
+                }
             }
 
             listOfTaskDAGs.add(newTaskDAG);
@@ -55,9 +83,9 @@ public class MainGanttMultipleCompromiseMKCR extends JFrame {
         final double cloudCost = scheduleResult.getCloudCost();
 
         SwingUtilities.invokeLater(() -> {
-            MainGanttMultipleCompromiseMKCR example = new MainGanttMultipleCompromiseMKCR(
-                    "CompromiseMKCR",
-                    "CompromiseMKCR (Accepted: " + GR + ", Cloud cost: " + cloudCost + ")",
+            MainProactiveCMKCR example = new MainProactiveCMKCR(
+                    "ProactiveCMKCR2HEFT",
+                    "ProactiveCMKCR2HEFT (Accepted: " + GR + ", Cloud cost: " + cloudCost + ")",
                     schedule);
             example.setSize(800, 400);
             example.setLocationRelativeTo(null);

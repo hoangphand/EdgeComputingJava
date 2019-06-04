@@ -6,9 +6,9 @@ public class MainCombineCUHEFT extends JFrame {
 
     private static final long serialVersionUID = 1L;
 
-    public MainCombineCUHEFT(String title, Schedule schedule) {
+    public MainCombineCUHEFT(String title, String chartLabel, Schedule schedule) {
         super(title);
-        SchedulingGanttChart ganttChart = new SchedulingGanttChart(this, schedule);
+        SchedulingGanttChart ganttChart = new SchedulingGanttChart(this, chartLabel, schedule);
     }
 
     public static void main(String[] args) {
@@ -55,6 +55,8 @@ public class MainCombineCUHEFT extends JFrame {
             if (tmpScheduleResult.isAccepted()) {
                 schedule.setProcessorExecutionSlots(tmpSchedule.getProcessorCoreExecutionSlots());
                 noOfAcceptedRequests += 1;
+
+                scheduleResult = tmpScheduleResult;
             }
 
             tmpScheduleResult.print();
@@ -62,11 +64,17 @@ public class MainCombineCUHEFT extends JFrame {
 
         System.out.println("Accepted " + noOfAcceptedRequests);
 
+        final int GR = noOfAcceptedRequests;
+        final double cloudCost = scheduleResult.getCloudCost();
+
         final Schedule finalSchedule = new Schedule(taskDAG, processorDAG);
         finalSchedule.setProcessorExecutionSlots(schedule.getProcessorCoreExecutionSlots());
 
         SwingUtilities.invokeLater(() -> {
-            MainCombineCUHEFT example = new MainCombineCUHEFT("Gantt Chart", finalSchedule);
+            MainCombineCUHEFT example = new MainCombineCUHEFT(
+                    "CombineCUHEFT",
+                    "CombineCUHEFT (Accepted: " + GR + ", Cloud cost: " + cloudCost + ")",
+                    finalSchedule);
             example.setSize(800, 400);
             example.setLocationRelativeTo(null);
             example.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);

@@ -2,7 +2,8 @@ package com.company;
 
 public class Processor {
     // Mbps: megabit per second
-    public static final int BANDWIDTH_LAN = 1024;
+    public static final int BANDWIDTH_FOG_LAN = 1024;
+    public static final int BANDWIDTH_CLOUD_LAN = 256;
     private static final int[] BANDWIDTH_WAN = {10, 100, 512, 1024};
     private static final int BANDWIDTH_WAN_LOWER_BOUND = 10;
     private static final int BANDWIDTH_WAN_UPPER_BOUND = 100;

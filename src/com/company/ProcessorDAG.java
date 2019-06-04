@@ -46,7 +46,7 @@ public class ProcessorDAG {
                 newProcessor.setStorage(Integer.parseInt(rowDetails[5]));
                 newProcessor.setWanUploadBandwidth(Integer.parseInt(rowDetails[6]));
                 newProcessor.setWanDownloadBandwidth(Integer.parseInt(rowDetails[7]));
-                newProcessor.setCostPerTimeUnit(Double.parseDouble(rowDetails[7]));
+                newProcessor.setCostPerTimeUnit(Double.parseDouble(rowDetails[8]));
 
                 this.processors.add(newProcessor);
             }
@@ -124,7 +124,7 @@ public class ProcessorDAG {
     }
 
     public double getAvgBandwidthWithLAN() {
-        return (this.getTotalUploadBandwidth() + this.getTotalDownloadBandwidth() + 2 * this.noOfFogs * Processor.BANDWIDTH_LAN) /
+        return (this.getTotalUploadBandwidth() + this.getTotalDownloadBandwidth() + 2 * this.noOfFogs * Processor.BANDWIDTH_FOG_LAN) /
                 (2 * (this.noOfFogs + this.noOfClouds) + 2 * this.noOfFogs);
     }
 
@@ -132,7 +132,9 @@ public class ProcessorDAG {
         int bandwidthToUse;
 
         if (fromProcessor.isFog() && toProcessor.isFog()) {
-            bandwidthToUse = Processor.BANDWIDTH_LAN;
+            bandwidthToUse = Processor.BANDWIDTH_FOG_LAN;
+        } else if (!fromProcessor.isFog() && !toProcessor.isFog()) {
+            bandwidthToUse = Processor.BANDWIDTH_CLOUD_LAN;
         } else {
             bandwidthToUse = Math.min(fromProcessor.getWanUploadBandwidth(), toProcessor.getWanDownloadBandwidth());
         }

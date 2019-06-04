@@ -6,9 +6,9 @@ public class MainGanttMultipleASFMaxHEFT extends JFrame {
 
     private static final long serialVersionUID = 1L;
 
-    public MainGanttMultipleASFMaxHEFT(String title, Schedule schedule) {
+    public MainGanttMultipleASFMaxHEFT(String title, String chartLabel, Schedule schedule) {
         super(title);
-        SchedulingGanttChart ganttChart = new SchedulingGanttChart(this, schedule);
+        SchedulingGanttChart ganttChart = new SchedulingGanttChart(this, chartLabel, schedule);
     }
 
     public static void main(String[] args) {
@@ -41,6 +41,8 @@ public class MainGanttMultipleASFMaxHEFT extends JFrame {
             if (tmpScheduleResult.isAccepted()) {
                 schedule.setProcessorExecutionSlots(tmpSchedule.getProcessorCoreExecutionSlots());
                 noOfAcceptedRequests += 1;
+
+                scheduleResult = tmpScheduleResult;
             }
 
             tmpScheduleResult.print();
@@ -48,8 +50,14 @@ public class MainGanttMultipleASFMaxHEFT extends JFrame {
 
         System.out.println("Accepted " + noOfAcceptedRequests);
 
+        final int GR = noOfAcceptedRequests;
+        final double cloudCost = scheduleResult.getCloudCost();
+
         SwingUtilities.invokeLater(() -> {
-            MainGanttMultipleASFMaxHEFT example = new MainGanttMultipleASFMaxHEFT("Gantt Chart", schedule);
+            MainGanttMultipleASFMaxHEFT example = new MainGanttMultipleASFMaxHEFT(
+                    "ASFMaxHEFT",
+                    "ASFMaxHEFT (Accepted: " + GR + ", Cloud cost: " + cloudCost + ")",
+                    schedule);
             example.setSize(1200, 800);
             example.setLocationRelativeTo(null);
             example.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);

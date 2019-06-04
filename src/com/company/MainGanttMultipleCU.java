@@ -6,9 +6,9 @@ public class MainGanttMultipleCU extends JFrame {
 
     private static final long serialVersionUID = 1L;
 
-    public MainGanttMultipleCU(String title, Schedule schedule) {
+    public MainGanttMultipleCU(String title, String chartLabel, Schedule schedule) {
         super(title);
-        SchedulingGanttChart ganttChart = new SchedulingGanttChart(this, schedule);
+        SchedulingGanttChart ganttChart = new SchedulingGanttChart(this, chartLabel, schedule);
     }
 
     public static void main(String[] args) {
@@ -40,6 +40,8 @@ public class MainGanttMultipleCU extends JFrame {
             if (tmpScheduleResult.isAccepted()) {
                 schedule.setProcessorExecutionSlots(tmpSchedule.getProcessorCoreExecutionSlots());
                 noOfAcceptedRequests += 1;
+
+                scheduleResult = tmpScheduleResult;
             }
 
             tmpScheduleResult.print();
@@ -47,8 +49,14 @@ public class MainGanttMultipleCU extends JFrame {
 
         System.out.println("Accepted " + noOfAcceptedRequests);
 
+        final int GR = noOfAcceptedRequests;
+        final double cloudCost = scheduleResult.getCloudCost();
+
         SwingUtilities.invokeLater(() -> {
-            MainGanttMultipleCU example = new MainGanttMultipleCU("Gantt Chart", schedule);
+            MainGanttMultipleCU example = new MainGanttMultipleCU(
+                    "CloudUnaware",
+                    "CloudUnaware (Accepted: " + GR + ", Cloud cost: " + cloudCost + ")",
+                    schedule);
             example.setSize(800, 400);
             example.setLocationRelativeTo(null);
             example.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);

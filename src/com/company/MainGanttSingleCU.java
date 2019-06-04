@@ -6,9 +6,9 @@ public class MainGanttSingleCU extends JFrame {
 
     private static final long serialVersionUID = 1L;
 
-    public MainGanttSingleCU(String title, Schedule schedule) {
+    public MainGanttSingleCU(String title, String chartLabel, Schedule schedule) {
         super(title);
-        SchedulingGanttChart ganttChart = new SchedulingGanttChart(this, schedule);
+        SchedulingGanttChart ganttChart = new SchedulingGanttChart(this, chartLabel, schedule);
     }
 
     public static void main(String[] args) {
@@ -22,7 +22,10 @@ public class MainGanttSingleCU extends JFrame {
         scheduleResult.print();
 
         SwingUtilities.invokeLater(() -> {
-            MainGanttSingleCU example = new MainGanttSingleCU("Gantt Chart", schedule);
+            MainGanttSingleCU example = new MainGanttSingleCU(
+                    "CloudUnaware",
+                    "CloudUnaware",
+                    schedule);
             example.setSize(1200, 700);
             example.setLocationRelativeTo(null);
             example.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
