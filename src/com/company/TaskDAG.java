@@ -196,8 +196,16 @@ public class TaskDAG {
         return this.deadline;
     }
 
+    public void setDeadline(double deadline) {
+        this.deadline = deadline;
+    }
+
     public double getArrivalTime() {
         return this.arrivalTime;
+    }
+
+    public void setMakespanHEFT(double makespanHEFT) {
+        this.makespanHEFT = makespanHEFT;
     }
 
     public double getMakespanHEFT() { return this.makespanHEFT; }

@@ -1,6 +1,7 @@
 package com.company;
 
 public class ScheduleResult {
+    private Schedule schedule;
     private boolean isAccepted;
     private double ast;
     private double aft;
@@ -14,9 +15,13 @@ public class ScheduleResult {
     private double percentageEarly;
     private double percentageLate;
     private double cloudCost;
+    private double averageMakespan;
+    private double percentageEdgeOccupancy;
+    private double averageResponseTime;
     private TaskDAG taskDAG;
 
     public ScheduleResult(Schedule schedule) {
+        this.schedule = schedule;
         this.taskDAG = schedule.getTaskDAG();
         this.ast = schedule.getAST();
         this.aft = schedule.getAFT();
@@ -51,12 +56,40 @@ public class ScheduleResult {
                         this.cloudCost += occupancyPeriod * currentProcessor.getCostPerTimeUnit();
                     }
                 }
+            } else {
+                for (int j = 0; j < schedule.getProcessorCoreExecutionSlots().get(i).size(); j++) {
+                    Slot currentSlot = schedule.getProcessorCoreExecutionSlots().get(i).get(j);
+
+                    if (currentSlot.getTask() != null) {
+                        this.percentageEdgeOccupancy += currentSlot.getEndTime() - currentSlot.getStartTime();
+                    }
+                }
             }
         }
     }
 
     public double getMakespan() {
         return this.makespan;
+    }
+
+    public double getPercentageEdgeOccupancy() {
+        this.percentageEdgeOccupancy = 0;
+
+        for (int i = 0; i < schedule.getProcessorCoreExecutionSlots().size(); i++) {
+            Processor currentProcessor = schedule.getProcessorCoreExecutionSlots().get(i).get(0).getProcessor();
+
+            if (currentProcessor.isFog()) {
+                for (int j = 0; j < schedule.getProcessorCoreExecutionSlots().get(i).size(); j++) {
+                    Slot currentSlot = schedule.getProcessorCoreExecutionSlots().get(i).get(j);
+
+                    if (currentSlot.getTask() != null) {
+                        this.percentageEdgeOccupancy += currentSlot.getEndTime() - currentSlot.getStartTime();
+                    }
+                }
+            }
+        }
+
+        return this.percentageEdgeOccupancy / (this.schedule.getProcessorDAG().getNoOfFogs() * this.aft);
     }
 
     public double getCloudCost() {

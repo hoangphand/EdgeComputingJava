@@ -35,9 +35,9 @@ public class MainGanttMultiple extends JFrame {
     public static void main(String[] args) {
         int noOfDAGsToTest = 100;
 
-        ProcessorDAG processorDAG = new ProcessorDAG("dataset-GHz/processors.dag");
+        ProcessorDAG processorDAG = new ProcessorDAG(GlobalConfig.PROCESSORS_PATH);
 
-        TaskDAG taskDAG = new TaskDAG(1, "dataset-GHz/1.dag");
+        TaskDAG taskDAG = new TaskDAG(1, GlobalConfig.DATASET_PATH + "1.dag");
         Schedule schedule = Heuristics.HEFT(taskDAG, processorDAG);
         double makespan = schedule.getAFT();
 
@@ -50,7 +50,7 @@ public class MainGanttMultiple extends JFrame {
         int noOfAcceptedRequests = 1;
 
         for (int id = 2; id < noOfDAGsToTest + 1; id++) {
-            TaskDAG newTaskDAG = new TaskDAG(id, "dataset-GHz/" + id + ".dag");
+            TaskDAG newTaskDAG = new TaskDAG(id, GlobalConfig.DATASET_PATH + id + ".dag");
 
             Schedule tmpSchedule = Heuristics.DynamicHEFT(schedule, newTaskDAG);
 
@@ -77,6 +77,8 @@ public class MainGanttMultiple extends JFrame {
 
         final int GR = noOfAcceptedRequests;
         final double cloudCost = scheduleResult.getCloudCost();
+
+        System.out.println("Percentage of edge occupancy: " + scheduleResult.getPercentageEdgeOccupancy());
 
         SwingUtilities.invokeLater(() -> {
             MainGanttMultiple example = new MainGanttMultiple(
