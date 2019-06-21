@@ -13,7 +13,7 @@ public class MainProactiveCMKCRHEFT extends JFrame {
     }
 
     public static void main(String[] args) {
-        int noOfDAGsToTest = 100;
+        int noOfDAGsToTest = GlobalConfig.DATASET_SIZE;
 
         ProcessorDAG processorDAG = new ProcessorDAG(GlobalConfig.PROCESSORS_PATH);
 
@@ -67,6 +67,8 @@ public class MainProactiveCMKCRHEFT extends JFrame {
 
         final int GR = noOfAcceptedRequests;
         final double cloudCost = scheduleResult.getCloudCost();
+
+        scheduleResult.printWithResourceUsage();
 
         System.out.println("Percentage of edge occupancy: " + scheduleResult.getPercentageEdgeOccupancy());
 

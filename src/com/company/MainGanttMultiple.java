@@ -33,7 +33,7 @@ public class MainGanttMultiple extends JFrame {
     }
 
     public static void main(String[] args) {
-        int noOfDAGsToTest = 100;
+        int noOfDAGsToTest = GlobalConfig.DATASET_SIZE;
 
         ProcessorDAG processorDAG = new ProcessorDAG(GlobalConfig.PROCESSORS_PATH);
 
@@ -43,9 +43,6 @@ public class MainGanttMultiple extends JFrame {
 
         ScheduleResult scheduleResult = new ScheduleResult(schedule);
         scheduleResult.print();
-
-        ArrayList<TaskDAG> listOfTaskDAGs = new ArrayList<TaskDAG>();
-        listOfTaskDAGs.add(taskDAG);
 
         int noOfAcceptedRequests = 1;
 
@@ -64,19 +61,18 @@ public class MainGanttMultiple extends JFrame {
 
             if (tmpScheduleResult.isAccepted()) {
                 schedule.setProcessorExecutionSlots(tmpSchedule.getProcessorCoreExecutionSlots());
-                newTaskDAG.setId(noOfAcceptedRequests);
                 noOfAcceptedRequests += 1;
 
                 scheduleResult = tmpScheduleResult;
             }
-
-            listOfTaskDAGs.add(newTaskDAG);
         }
 
         System.out.println("Accepted " + noOfAcceptedRequests);
 
         final int GR = noOfAcceptedRequests;
         final double cloudCost = scheduleResult.getCloudCost();
+
+        scheduleResult.printWithResourceUsage();
 
         System.out.println("Percentage of edge occupancy: " + scheduleResult.getPercentageEdgeOccupancy());
 

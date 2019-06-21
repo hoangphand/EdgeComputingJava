@@ -12,7 +12,7 @@ public class MainChangeDeadlineUsingCP {
         ProcessorDAG processorDAG = new ProcessorDAG("dataset-GHz/new-processors.dag");
 
         double avgProcessingRate = processorDAG.getAvgProcessingRate();
-        double avgBandwidth = processorDAG.getAvgBandwidthWithLAN();
+        double avgBandwidth = processorDAG.getAvgBandwidth();
 
 
         for (int index = 1; index < noOfDAGs + 1; index++) {
@@ -88,8 +88,8 @@ public class MainChangeDeadlineUsingCP {
             Random ran = new Random();
             double randomDeadline = criticalPathLength + ran.nextDouble() * criticalPathLength;
 
-            System.out.println("Random deadline: " + randomDeadline);
             System.out.println("Deadline: " + taskDAG.getDeadline());
+            System.out.println("Random deadline: " + randomDeadline);
             taskDAG.setDeadline(randomDeadline);
 
             taskDAG.exportDAG(newDirDataSet + "/" + index + ".dag");

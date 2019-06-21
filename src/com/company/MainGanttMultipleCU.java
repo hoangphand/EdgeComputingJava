@@ -12,7 +12,7 @@ public class MainGanttMultipleCU extends JFrame {
     }
 
     public static void main(String[] args) {
-        int noOfDAGsToTest = 100;
+        int noOfDAGsToTest = GlobalConfig.DATASET_SIZE;
 
         ProcessorDAG processorDAG = new ProcessorDAG(GlobalConfig.PROCESSORS_PATH);
 
@@ -23,14 +23,12 @@ public class MainGanttMultipleCU extends JFrame {
         ScheduleResult scheduleResult = new ScheduleResult(schedule);
         scheduleResult.print();
 
-//        ScheduleResult lastAcceptedScheduleResult = null;
-
         int noOfAcceptedRequests = 1;
 
         for (int id = 2; id < noOfDAGsToTest + 1; id++) {
             TaskDAG newTaskDAG = new TaskDAG(id, GlobalConfig.DATASET_PATH + id + ".dag");
 
-            Schedule tmpSchedule = Heuristics.DynamicCloudUnaware(schedule, taskDAG);
+            Schedule tmpSchedule = Heuristics.DynamicCloudUnaware(schedule, newTaskDAG);
 
             if (tmpSchedule.getActualStartTimeOfDAG() != taskDAG.getArrivalTime()) {
                 System.out.println("Actual start time: " + tmpSchedule.getActualStartTimeOfDAG());
@@ -38,6 +36,7 @@ public class MainGanttMultipleCU extends JFrame {
             }
 
             ScheduleResult tmpScheduleResult = new ScheduleResult(tmpSchedule);
+            tmpScheduleResult.print();
 
             if (tmpScheduleResult.isAccepted()) {
                 schedule.setProcessorExecutionSlots(tmpSchedule.getProcessorCoreExecutionSlots());
@@ -45,14 +44,14 @@ public class MainGanttMultipleCU extends JFrame {
 
                 scheduleResult = tmpScheduleResult;
             }
-
-            tmpScheduleResult.print();
         }
 
         System.out.println("Accepted " + noOfAcceptedRequests);
 
         final int GR = noOfAcceptedRequests;
         final double cloudCost = scheduleResult.getCloudCost();
+
+        scheduleResult.printWithResourceUsage();
 
         System.out.println("Percentage of edge occupancy: " + scheduleResult.getPercentageEdgeOccupancy());
 

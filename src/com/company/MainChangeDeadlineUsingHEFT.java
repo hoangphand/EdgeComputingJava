@@ -16,7 +16,7 @@ public class MainChangeDeadlineUsingHEFT {
             double makespan = schedule.getAFT();
 
             taskDAG.setMakespanHEFT(makespan);
-            taskDAG.setDeadline(makespan * 1.5);
+            taskDAG.setDeadline(makespan * 1.2);
 
             taskDAG.exportDAG(newDirDataSet + "/" + index + ".dag");
         }

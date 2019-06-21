@@ -38,34 +38,7 @@ public class ScheduleResult {
             this.lateTime = this.makespan - this.taskDAG.getDeadline();
         }
 
-        this.noOfFogNodesUsed = schedule.getNoOfTasksAllocatedToFogNodes();
-        this.noOfCloudNodesUsed = schedule.getNoOfTasksAllocatedToCloudNodes();
 
-        this.cloudCost = 0;
-
-        for (int i = 0; i < schedule.getProcessorCoreExecutionSlots().size(); i++) {
-            Processor currentProcessor = schedule.getProcessorCoreExecutionSlots().get(i).get(0).getProcessor();
-
-            if (!currentProcessor.isFog()) {
-                for (int j = 0; j < schedule.getProcessorCoreExecutionSlots().get(i).size(); j++) {
-                    Slot currentSlot = schedule.getProcessorCoreExecutionSlots().get(i).get(j);
-
-                    if (currentSlot.getTask() != null) {
-                        double occupancyPeriod = currentSlot.getEndTime() - currentSlot.getStartTime();
-
-                        this.cloudCost += occupancyPeriod * currentProcessor.getCostPerTimeUnit();
-                    }
-                }
-            } else {
-                for (int j = 0; j < schedule.getProcessorCoreExecutionSlots().get(i).size(); j++) {
-                    Slot currentSlot = schedule.getProcessorCoreExecutionSlots().get(i).get(j);
-
-                    if (currentSlot.getTask() != null) {
-                        this.percentageEdgeOccupancy += currentSlot.getEndTime() - currentSlot.getStartTime();
-                    }
-                }
-            }
-        }
     }
 
     public double getMakespan() {
@@ -74,22 +47,31 @@ public class ScheduleResult {
 
     public double getPercentageEdgeOccupancy() {
         this.percentageEdgeOccupancy = 0;
+//        int noOfFogs = 0;
+        double maxAFT = -1;
 
         for (int i = 0; i < schedule.getProcessorCoreExecutionSlots().size(); i++) {
             Processor currentProcessor = schedule.getProcessorCoreExecutionSlots().get(i).get(0).getProcessor();
 
             if (currentProcessor.isFog()) {
+//                noOfFogs += 1;
                 for (int j = 0; j < schedule.getProcessorCoreExecutionSlots().get(i).size(); j++) {
                     Slot currentSlot = schedule.getProcessorCoreExecutionSlots().get(i).get(j);
 
                     if (currentSlot.getTask() != null) {
                         this.percentageEdgeOccupancy += currentSlot.getEndTime() - currentSlot.getStartTime();
+
+                        if (currentSlot.getEndTime() > maxAFT) {
+                            maxAFT = currentSlot.getEndTime();
+                        }
                     }
                 }
             }
         }
 
-        return this.percentageEdgeOccupancy / (this.schedule.getProcessorDAG().getNoOfFogs() * this.aft);
+//        System.out.println("noOfFogs: " + noOfFogs);
+//        System.out.println("percentageEdgeOccupancy: " + this.percentageEdgeOccupancy);
+        return (double)Math.round(this.percentageEdgeOccupancy * 100 / (this.schedule.getProcessorDAG().getNoOfFogs() * maxAFT) * 100d) / 100d;
     }
 
     public double getCloudCost() {
@@ -108,6 +90,43 @@ public class ScheduleResult {
         System.out.println("Makespan: " + this.makespan + ", MakespanHEFT: " + this.taskDAG.getMakespanHEFT());
         System.out.println("Arrives at " + this.taskDAG.getArrivalTime() + ", wait time: " + (this.ast - this.taskDAG.getArrivalTime()));
         System.out.println("AST: " + this.ast + ", AFT: " + this.aft);
+        System.out.println("=========================================================");
+    }
+
+    public void printWithResourceUsage() {
+        System.out.println("App id " + this.taskDAG.getId());
+        if (isAccepted) {
+            System.out.println(PrintUtils.ANSI_GREEN_BACKGROUND + "ACCEPTED!!!" + PrintUtils.ANSI_RESET);
+        } else {
+            System.out.println(PrintUtils.ANSI_RED_BACKGROUND + "REJECTED!!!" + PrintUtils.ANSI_RESET);
+        }
+
+        System.out.println("Response time: " + this.responseTime + ", deadline: " + this.taskDAG.getDeadline());
+        System.out.println("Makespan: " + this.makespan + ", MakespanHEFT: " + this.taskDAG.getMakespanHEFT());
+        System.out.println("Arrives at " + this.taskDAG.getArrivalTime() + ", wait time: " + (this.ast - this.taskDAG.getArrivalTime()));
+        System.out.println("AST: " + this.ast + ", AFT: " + this.aft);
+
+        this.noOfFogNodesUsed = schedule.getNoOfTasksAllocatedToFogNodes();
+        this.noOfCloudNodesUsed = schedule.getNoOfTasksAllocatedToCloudNodes();
+
+        this.cloudCost = 0;
+
+        for (int i = 0; i < schedule.getProcessorCoreExecutionSlots().size(); i++) {
+            Processor currentProcessor = schedule.getProcessorCoreExecutionSlots().get(i).get(0).getProcessor();
+
+            if (!currentProcessor.isFog()) {
+                for (int j = 0; j < schedule.getProcessorCoreExecutionSlots().get(i).size(); j++) {
+                    Slot currentSlot = schedule.getProcessorCoreExecutionSlots().get(i).get(j);
+
+                    if (currentSlot.getTask() != null) {
+                        double occupancyPeriod = currentSlot.getEndTime() - currentSlot.getStartTime();
+
+                        this.cloudCost += occupancyPeriod * currentProcessor.getCostPerTimeUnit();
+                    }
+                }
+            }
+        }
+
         System.out.println("CCR: " + this.taskDAG.getCCR() +
                 ", noOfClouds: " + this.noOfCloudNodesUsed + ", noOfFogs: " + this.noOfFogNodesUsed);
         System.out.println("Cloud cost: " + this.cloudCost);

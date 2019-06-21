@@ -128,23 +128,31 @@ public class Schedule {
                 processorCore.getSchedulePositionId()
         );
 
-//        find the earliest slot
-        for (int i = 0; i < currentProcessorSlots.size(); i++) {
+//        find the earliest slot - from end to start
+        Slot earliestSlot = null;
+        for (int i = currentProcessorSlots.size() - 1; i >= 0; i--) {
             Slot currentSlot = currentProcessorSlots.get(i);
 
-            if (currentSlot.getTask() == null) {
-                double actualStart = Math.max(currentSlot.getStartTime(), readyTime);
-                double actualEnd = actualStart + processingTime;
+            if (currentSlot.getEndTime() < readyTime) {
+                break;
+            } else {
+                if (currentSlot.getTask() == null) {
+                    double actualStart = Math.max(currentSlot.getStartTime(), readyTime);
+                    double actualEnd = actualStart + processingTime;
 
-                if (actualEnd <= currentSlot.getEndTime()) {
-//                    return the first fit slot for the task on the current processor
-                    return new Slot(task, processorCore, actualStart, actualEnd);
+                    if (actualEnd <= currentSlot.getEndTime()) {
+                        earliestSlot = new Slot(task, processorCore, actualStart, actualEnd);
+                    }
                 }
             }
         }
 
-        System.out.println("Nothing");
-        return new Slot(task, processorCore, -1, -1);
+        if (earliestSlot != null) {
+            return earliestSlot;
+        } else {
+            System.out.println("Nothing");
+            return new Slot(task, processorCore, -1, -1);
+        }
     }
 
     //    this function calculates the earliest slot that a processor

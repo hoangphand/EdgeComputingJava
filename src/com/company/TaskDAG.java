@@ -153,7 +153,7 @@ public class TaskDAG {
             }
 
             this.makespanHEFT = Double.parseDouble(reader.readLine().trim().split("\\s+")[1]);
-            this.k = Double.parseDouble(reader.readLine().trim().split("\\s+")[1]);
+//            this.k = Double.parseDouble(reader.readLine().trim().split("\\s+")[1]);
             this.deadline = Double.parseDouble(reader.readLine().trim().split("\\s+")[1]);
             this.arrivalTime = Double.parseDouble(reader.readLine().trim().split("\\s+")[1]);
             this.ccr = Double.parseDouble(reader.readLine().trim().split("\\s+")[1]);
